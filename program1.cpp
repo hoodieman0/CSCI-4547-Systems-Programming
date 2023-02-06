@@ -86,8 +86,8 @@ int main(int argc, char* argv[]){
 
 	// Ending Arguments
 	for (optx = optind; optx < argc; optx++){
-		cout <<"Arguement: " <<argv[optx] <<endl;
-		out <<"Arguement: " <<argv[optx] <<endl;
+		cout <<"Arguement " <<argv[optx] <<endl;
+		out <<"Arguement " <<argv[optx] <<endl;
 	}
 
 	cout <<"\n~End Of Program~\n" <<endl;
