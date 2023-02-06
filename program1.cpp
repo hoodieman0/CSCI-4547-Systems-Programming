@@ -95,3 +95,9 @@ int main(int argc, char* argv[]){
 void usage(){
 	cout <<"Usage: program1 [-i: string] [-o filename] [aulv] [arguments]\n"; 
 }
+
+/*
+For test e, we can see that the program has correctly parsed "CSCI 6657" as a single argument due to its quotations. We can also see from this test and test f that *.html and *.log were parsed and 
+classified as arguments in the literal form they appeared on the command line. However, the *.bak argument has been pattern matched to the two dummy .bak files, and thus the names of these files
+were substituted as the arguments in place of *.bak.
+*/
