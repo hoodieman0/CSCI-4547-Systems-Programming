@@ -1,0 +1,4 @@
+-----------------------------------
+Command ./P1_VargasMok
+Switch i Argument CSCI 6657
+Arguement *.html

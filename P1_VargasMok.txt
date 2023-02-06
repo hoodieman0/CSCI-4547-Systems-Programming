@@ -1,0 +1,27 @@
+-----------------------------------
+Command ./P1_VargasMok
+-----------------------------------
+Command ./P1_VargasMok
+Switch o Argument myCommand
+Arguement myMain.c
+Arguement myClass.c
+-----------------------------------
+Command ./P1_VargasMok
+Switch l
+Arguement w/java
+Arguement bash-3.2
+Arguement ls
+-----------------------------------
+Command ./P1_VargasMok
+Switch u
+Switch v
+Arguement w/java/
+Arguement kira:w/java/
+-----------------------------------
+Command ./P1_VargasMok
+Switch i Argument CSCI 6657
+Arguement *.html
+-----------------------------------
+Command ./P1_VargasMok
+Arguement *.bak
+Arguement *.log
