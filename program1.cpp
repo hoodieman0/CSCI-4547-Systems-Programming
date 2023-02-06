@@ -42,7 +42,7 @@ int main(int argc, char* argv[]){
 	out <<"Command " <<argv[0] <<endl;
 
 	for (;;){
-		ch = getopt_long(argc, argv, "ioaulv", longOpts, &code);
+		ch = getopt_long(argc, argv, "i:oaulv", longOpts, &code);
 
 		// All Switches
 		if (ch == -1) break;
