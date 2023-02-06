@@ -1,3 +1,20 @@
+/*
+Authors: Sean Vargas, James Mok
+Created On: 2 February 2023
+Last Edited: 5 February 2023
+
+A short program meant to take in command line arguments and break down each
+passed in argument.
+
+(a) ./P1
+(b) ./P1 -o myCommand myMain.c myClass.c
+(c) ./P1 w/java bash-3.2 ls -l
+(d) ./P1 -au --verbose w/java/ kira:w/java/
+(e) ./P1 -i "CSCI 6657" *.html > mytemp.txt
+(f) ./P1 *.bak *.log
+
+*/
+
 #include <iostream>
 #include <fstream>
 #include <getopt.h>
