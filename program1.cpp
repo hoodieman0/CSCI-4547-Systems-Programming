@@ -43,6 +43,7 @@ int main(int argc, char* argv[]){
 	for (;;){
 		ch = getopt_long(argc, argv, "ioaulv", longOpts, &code);
 
+		// All Switches
 		if (ch == -1) break;
 		switch (ch){
 			case 'i':
@@ -82,12 +83,14 @@ int main(int argc, char* argv[]){
 		}
 	}
 
+	// Ending Arguments
 	for (optx = optind; optx < argc; optx++){
 		cout <<"Arguement: " <<argv[optx] <<endl;
 		out <<"Arguement: " <<argv[optx] <<endl;
 	}
 }
 
+// Command Line Usage Display
 void usage(){
 	cout <<"Usage: program1 [-ioaul] [arguments]\n"; 
 }
