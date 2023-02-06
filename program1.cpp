@@ -19,43 +19,63 @@ passed in argument.
 #include <fstream>
 #include <getopt.h>
 
+using namespace std;
+
 void usage();
 
 int main(int argc, char* argv[]){
-	std::ofstream out("P1_VargasMok.txt", std::ios::out | std::ios::app);
-	int ch, optx;
+	ofstream out("P1_VargasMok.txt", ios::out | ios::app);
+	
+	// see https://man7.org/linux/man-pages/man3/getopt.3.html
+	// defines all long switches
+	struct option longOpts[] = {
+		{"verbose", no_argument, NULL, 'v'}
+	}
+	
+	int ch, code, optx;
 
-	std::cout <<"-----------------------------------" <<std::endl;
-	out <<"-----------------------------------" <<std::endl;
+	cout <<"-----------------------------------" <<endl;
+	out <<"-----------------------------------" <<endl;
 
-	std::cout <<"Command " <<argv[0] <<std::endl;
-	out <<"Command " <<argv[0] <<std::endl;
+	cout <<"Command " <<argv[0] <<endl;
+	out <<"Command " <<argv[0] <<endl;
 
 	for (;;){
-		ch = getopt(argc, argv, "ioaul");
+		ch = getopt_long(argc, argv, "ioaulv", longOpts, &code);
 
 		if (ch == -1) break;
 		switch (ch){
 			case 'i':
-				std::cout <<"Switch " <<char(ch) <<std::endl;
-				out <<"Switch " <<char(ch) <<std::endl;
+				cout <<"Switch " <<char(ch) <<endl;
+				out <<"Switch " <<char(ch) <<endl;
 				break;
 			case 'o':
-				std::cout <<"Switch " <<char(ch) <<std::endl;
-				out <<"Switch " <<char(ch) <<std::endl;
+				cout <<"Switch " <<char(ch) <<endl;
+				out <<"Switch " <<char(ch) <<endl;
 				break;
 			case 'q':
-				std::cout <<"Switch " <<char(ch) <<std::endl;
-				out <<"Switch " <<char(ch) <<std::endl;
+				cout <<"Switch " <<char(ch) <<endl;
+				out <<"Switch " <<char(ch) <<endl;
 				break;
 			case 'u':
-				std::cout <<"Switch " <<char(ch) <<std::endl;
-				out <<"Switch " <<char(ch) <<std::endl;
+				cout <<"Switch " <<char(ch) <<endl;
+				out <<"Switch " <<char(ch) <<endl;
 				break;
 			case 'l':
-				std::cout <<"Switch " <<char(ch) <<std::endl;
-				out <<"Switch " <<char(ch) <<std::endl;
+				cout <<"Switch " <<char(ch) <<endl;
+				out <<"Switch " <<char(ch) <<endl;
 				break;
+			case 'v':
+				cout <<"Switch " <<char(ch) <<endl;
+				out <<"Switch " <<char(ch) <<endl;
+				break;
+			case 0:
+				cout <<"Switch: " << longOpts[code].name << endl;
+				out <<"Switch: " << longOpts[code].name << endl;
+				if (optarg != NULL){
+					cout << "Argument: " << optarg << endl;
+					out << "Argument: " << optarg << endl;
+				}
 			default:
 				usage();
 				break;
@@ -63,11 +83,11 @@ int main(int argc, char* argv[]){
 	}
 
 	for (optx = optind; optx < argc; optx++){
-		std::cout <<"Arguement " <<argv[optx] <<std::endl;
-		out <<"Arguement " <<argv[optx] <<std::endl;
+		cout <<"Arguement: " <<argv[optx] <<endl;
+		out <<"Arguement: " <<argv[optx] <<endl;
 	}
 }
 
 void usage(){
-	std::cout <<"Usage: program1 [-ioaul] [arguments]\n"; 
+	cout <<"Usage: program1 [-ioaul] [arguments]\n"; 
 }
