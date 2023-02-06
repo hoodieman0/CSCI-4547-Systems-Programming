@@ -28,7 +28,7 @@ int main(int argc, char* argv[]){
 	
 	// see https://man7.org/linux/man-pages/man3/getopt.3.html
 	// defines all long switches
-	struct option longOpts[] = {
+	option longOpts[] = {
 		{"verbose", no_argument, NULL, 'v'},
 		{nullptr, no_argument, nullptr, 0}
 	};
