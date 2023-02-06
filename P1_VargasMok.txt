@@ -23,5 +23,7 @@ Switch i Argument CSCI 6657
 Arguement *.html
 -----------------------------------
 Command ./P1_VargasMok
-Arguement *.bak
+Arguement test1.bak
+Arguement test2.bak
+Arguement test3.bak
 Arguement *.log
