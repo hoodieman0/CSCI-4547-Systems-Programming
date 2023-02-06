@@ -24,7 +24,6 @@ using namespace std;
 void usage();
 
 int main(int argc, char* argv[]){
-	cout <<"\n~Starting Program1~\n" <<endl;
 	ofstream out("P1_VargasMok.txt", ios::out | ios::app);
 	
 	// see https://man7.org/linux/man-pages/man3/getopt.3.html
@@ -89,8 +88,6 @@ int main(int argc, char* argv[]){
 		cout <<"Arguement " <<argv[optx] <<endl;
 		out <<"Arguement " <<argv[optx] <<endl;
 	}
-
-	cout <<"\n~End Of Program~\n" <<endl;
 }
 
 // Command Line Usage Display
