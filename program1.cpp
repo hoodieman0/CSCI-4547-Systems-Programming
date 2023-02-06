@@ -42,7 +42,7 @@ int main(int argc, char* argv[]){
 	out <<"Command " <<argv[0] <<endl;
 
 	for (;;){
-		ch = getopt_long(argc, argv, "i:oaulv", longOpts, &code);
+		ch = getopt_long(argc, argv, "i:o:aulv", longOpts, &code);
 
 		// All Switches
 		if (ch == -1) break;
@@ -52,8 +52,8 @@ int main(int argc, char* argv[]){
 				out <<"Switch " <<char(ch) <<" Argument " <<optarg <<endl;
 				break;
 			case 'o':
-				cout <<"Switch " <<char(ch) <<endl;
-				out <<"Switch " <<char(ch) <<endl;
+				cout <<"Switch " <<char(ch) <<" Argument " <<optarg <<endl;
+				out <<"Switch " <<char(ch) <<" Argument " <<optarg <<endl;
 				break;
 			case 'q':
 				cout <<"Switch " <<char(ch) <<endl;
