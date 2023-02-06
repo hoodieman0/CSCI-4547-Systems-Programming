@@ -92,5 +92,5 @@ int main(int argc, char* argv[]){
 
 // Command Line Usage Display
 void usage(){
-	cout <<"Usage: program1 [-ioaul] [arguments]\n"; 
+	cout <<"Usage: program1 [-i: string] [-o filename] [aulv] [arguments]\n"; 
 }
