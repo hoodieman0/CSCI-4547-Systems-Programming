@@ -48,7 +48,7 @@ Params(int argc, char* argv[]){
 	// Ending Arguments
 	cout << "Ending Arguments: ";
 	for (optx = optind; optx < argc; optx++){
-		cout <<argv[optx] << " ";
+		cout <<"\"" <<argv[optx] << "\" ";
 	}
 }
 
