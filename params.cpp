@@ -56,5 +56,5 @@ void Params::print(){
 }
 
 void Params::usage(){
-	cout <<"Usage: \n";
+	cout <<"Usage: sniff [-v --verbose] [-h --help] [-o filename] [-d --dir directory] [-c] string" << endl;
 }
