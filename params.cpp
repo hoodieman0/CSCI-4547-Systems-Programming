@@ -39,6 +39,10 @@ Params::Params(int argc, char* argv[]){
 				break;
 		}
 	}
+	for (optx = optind; optx < argc; optx++){
+		cout <<"Arguement " <<argv[optx] <<endl;
+		out <<"Arguement " <<argv[optx] <<endl;
+	}
 }
 
 void Params::print(){
