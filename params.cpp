@@ -5,8 +5,8 @@ Params::Params(int argc, char* argv[]){
 	int ch;
 
 	const option longOpts[] = {
-		{"verbose", no_argument, nullptr, 'v'},
-		{"help", no_argument, nullptr, 'h'},
+		{"Verbose", no_argument, nullptr, 'v'},
+		{"Help", no_argument, nullptr, 'h'},
 		{nullptr, no_argument, nullptr, 0}
 	};
 
@@ -41,7 +41,18 @@ Params::Params(int argc, char* argv[]){
 }
 
 void Params::print(){
-	out <<startDir <<"   " <<outFileName;
+	if (fileOutput){
+		out <<"Start at: " <<(directorySearch ? startDir : "Current directory") <<"\n";
+		out <<"Output file name: " <<outFileName <<"\n";
+		out <<"Verbose? " <<(verbose ? "Yes" : "No") <<"\n";
+		out <<"Ignore case? " <<(caseInsensitive ? "Yes" : "No") <<"\n";
+	}
+	else {
+		cout <<"Start at: " <<(directorySearch ? startDir : "Current directory") <<"\n";
+		cout <<"No output file\n";
+		cout <<"Verbose? " <<(verbose ? "Yes" : "No") <<"\n";
+		cout <<"Ignore case? " <<(caseInsensitive ? "Yes" : "No") <<"\n";
+	}
 }
 
 void Params::usage(){
