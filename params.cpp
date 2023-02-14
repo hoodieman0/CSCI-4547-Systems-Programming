@@ -5,8 +5,9 @@ Params::Params(int argc, char* argv[]){
 	int ch;
 
 	const option longOpts[] = {
-		{"Verbose", no_argument, nullptr, 'v'},
-		{"Help", no_argument, nullptr, 'h'},
+		{"verbose", no_argument, nullptr, 'v'},
+		{"dir", required_argument, nullptr, 'd'},
+		{"help", no_argument, nullptr, 'h'},
 		{nullptr, no_argument, nullptr, 0}
 	};
 
