@@ -19,7 +19,7 @@ Params::Params(int argc, char* argv[]){
 			case 'o':
 				fileOutput = true;
 				outFileName = optarg;
-				out.open(optarg, ios::out);
+				out.open(outFileName, ios::out);
 				break;
 			case 'd':
 				directorySearch = true;
