@@ -1,9 +1,14 @@
 #include <getopt.h>
 #include "params.hpp"
 
-Params::Params(int argc, char* argv[]){
+// Constructs params class
+// Precondition: valid program arguments
+// Postcondition: params object is created
+Params::
+Params(int argc, char* argv[]){
 	int ch;
 
+	// Long switch equivalents
 	const option longOpts[] = {
 		{"verbose", no_argument, nullptr, 'v'},
 		{"dir", required_argument, nullptr, 'd'},
@@ -11,41 +16,47 @@ Params::Params(int argc, char* argv[]){
 		{nullptr, no_argument, nullptr, 0}
 	};
 
+	// Switch options
 	for(;;){
 		ch = getopt_long(argc, argv, "o:d:vhc", longOpts, nullptr);
 
 		if (ch == -1) break;
 		switch (ch){
-			case 'o':
+			case 'o': // send to file
 				fileOutput = true;
 				outFileName = optarg;
 				out.open(outFileName, ios::out);
 				break;
-			case 'd':
+			case 'd': // search from directory
 				directorySearch = true;
 				startDir = optarg;
 				break;
-			case 'v':
+			case 'v': // print processed files/directories to cout
 				verbose = true;
 				break;
-			case 'h':
-				help = true;
-				break;
-			case 'c':
+			case 'c': // is inputted string case sensitive
 				caseInsensitive = true;
 				break;
+			case 'h': // print helpful information to run program
+				help = true;
 			default:
 				usage();
 				break;
 		}
 	}
+
+	// Ending Arguments
 	for (optx = optind; optx < argc; optx++){
 		cout <<"Arguement " <<argv[optx] <<endl;
 		out <<"Arguement " <<argv[optx] <<endl;
 	}
 }
 
-void Params::print(){
+// Prints the all the data members of the params class
+// Precondition: valid Params class
+// Postcondition: none
+void Params::
+print(){
 	if (fileOutput){
 		out <<"Start at: " <<(directorySearch ? startDir : "Current directory") <<"\n";
 		out <<"Output file name: " <<outFileName <<"\n";
@@ -60,6 +71,10 @@ void Params::print(){
 	}
 }
 
-void Params::usage(){
+// Prints a Unix usage statement on how to execute the command
+// Precondition: none
+// Postcondition: none
+void Params::
+usage(){
 	cout <<"Usage: sniff [-v||--verbose] [-h ||--help] [-o filename] [-d||--dir directory] [-c] string" << endl;
 }
