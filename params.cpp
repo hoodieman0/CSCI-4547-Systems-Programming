@@ -6,7 +6,7 @@
 // Postcondition: params object is created
 Params::
 Params(int argc, char* argv[]){
-	int ch;
+	int ch, optx;
 
 	// Long switch equivalents
 	const option longOpts[] = {
@@ -46,9 +46,9 @@ Params(int argc, char* argv[]){
 	}
 
 	// Ending Arguments
+	cout << "Ending Arguments: ";
 	for (optx = optind; optx < argc; optx++){
-		cout <<"Arguement " <<argv[optx] <<endl;
-		out <<"Arguement " <<argv[optx] <<endl;
+		cout <<argv[optx] << " ";
 	}
 }
 
