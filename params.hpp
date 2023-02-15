@@ -9,7 +9,7 @@ private:
 	char* outFileName;
 	ofstream out;
 	// Switches: v, h, o, d, c
-	bool verbose=false, help=false, fileOutput=false, directorySearch=false, caseInsensitive=false;
+	bool verbose = false, help = false, fileOutput = false, directorySearch = false, caseInsensitive = false;
 public:
 	Params(int argc, char* argv[]);
 	~Params() = default;

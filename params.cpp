@@ -50,6 +50,7 @@ Params(int argc, char* argv[]){
 	for (optx = optind; optx < argc; optx++){
 		cout <<"\"" <<argv[optx] << "\" ";
 	}
+    cout <<endl;
 }
 
 // Prints the all the data members of the params class
