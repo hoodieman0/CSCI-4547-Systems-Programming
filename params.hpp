@@ -14,6 +14,6 @@ public:
 	Params(int argc, char* argv[]);
 	~Params() = default;
 
-	void print();
+	void print(ostream& out);
 	void usage();
 };

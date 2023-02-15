@@ -57,19 +57,11 @@ Params(int argc, char* argv[]){
 // Precondition: valid Params class
 // Postcondition: none
 void Params::
-print(){
-	if (fileOutput){
-		out <<"Start at: " <<(directorySearch ? startDir : "Current directory") <<"\n";
-		out <<"Output file name: " <<outFileName <<"\n";
-		out <<"Verbose? " <<(verbose ? "Yes" : "No") <<"\n";
-		out <<"Ignore case? " <<(caseInsensitive ? "Yes" : "No") <<"\n";
-	}
-	else {
-		cout <<"Start at: " <<(directorySearch ? startDir : "Current directory") <<"\n";
-		cout <<"No output file\n";
-		cout <<"Verbose? " <<(verbose ? "Yes" : "No") <<"\n";
-		cout <<"Ignore case? " <<(caseInsensitive ? "Yes" : "No") <<"\n";
-	}
+print(ostream& out){
+	out <<"Start at: " <<(directorySearch ? startDir : "Current directory") <<"\n";
+	out <<"Output file name: " <<(fileOutput ? outFileName : "No file specified") <<"\n";
+	out <<"Verbose? " <<(verbose ? "Yes" : "No") <<"\n";
+	out <<"Ignore case? " <<(caseInsensitive ? "Yes" : "No") <<"\n";
 }
 
 // Prints a Unix usage statement on how to execute the command
