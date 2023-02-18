@@ -16,7 +16,7 @@ using namespace std;
 
 class FileID{
     private:
-        char* filename;
+        string filename;
         int iNode;
         string pathname;
         vector<string> keywords;
@@ -24,7 +24,7 @@ class FileID{
     public:
         // What is the type being talked about?
         FileID()=delete;
-        FileID(char* filename, int type, string path) : 
+        FileID(string filename, int type, string path) : 
             filename(filename), iNode(type), pathname(path) {}
         ~FileID()=default;
 
