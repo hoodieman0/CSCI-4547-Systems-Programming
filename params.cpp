@@ -1,3 +1,11 @@
+/*
+CSCI-4547 Systems Programming
+params.cpp
+Author: James Mok and Sean Vargas
+Created: 13 Feb 2023
+Last edited: 18 Feb 2023
+*/
+
 #include <getopt.h>
 #include "params.hpp"
 
