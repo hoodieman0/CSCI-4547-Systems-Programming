@@ -24,9 +24,10 @@ class FileID{
     public:
         // What is the type being talked about?
         FileID()=delete;
-        FileID(char* filename, int type, string path) : filename(filename), pathname(path) {}
+        FileID(char* filename, int type, string path) : 
+            filename(filename), iNode(type), pathname(path) {}
         ~FileID()=default;
-        
+
         void print(ostream& out);
         void addKeyword(string word);
 };
