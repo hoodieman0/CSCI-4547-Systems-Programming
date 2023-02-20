@@ -10,13 +10,12 @@ Last edited: 13 Feb 2023
 #include <iostream>
 #include <vector>
 #include <filesystem>
-#include <cstring>
 
 using namespace std;
 
 class Params{
 private:
-	char* startDir;
+	const char* startDir;
 	char* outFileName;
 	ofstream out;
 	vector<string> keywords;
@@ -24,7 +23,7 @@ private:
 	bool verbose = false, help = false, fileOutput = false, directorySearch = false, caseInsensitive = false;
 public:
 	Params(int argc, char* argv[]);
-	~Params() { if(!directorySearch) delete[] startDir; }
+	~Params() = default;
 
 	void print(ostream& out);
 	void usage();

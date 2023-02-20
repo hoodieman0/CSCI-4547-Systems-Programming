@@ -60,13 +60,6 @@ Params(int argc, char* argv[]){
 		keywords.push_back(argv[optx]);
 	}
     cout <<endl;
-
-	// if no directory was added, use current dir
-	if(!directorySearch){
-		string s = filesystem::relative(filesystem::current_path()).string();
-		startDir = new char[s.length() + 1];
-		strcpy(startDir, s.c_str());
-	}
 }
 
 // Prints the all the data members of the params class
@@ -74,7 +67,7 @@ Params(int argc, char* argv[]){
 // Postcondition: none
 void Params::
 print(ostream& out){
-	out <<"Start at: " << startDir <<"\n";
+	out <<"Start at: " <<(directorySearch ? startDir : "Current directory") <<"\n";
 	out <<"Output file name: " <<(fileOutput ? outFileName : "No file specified") <<"\n";
 	out <<"Verbose? " <<(verbose ? "Yes" : "No") <<"\n";
 	out <<"Ignore case? " <<(caseInsensitive ? "Yes" : "No") <<"\n";
