@@ -11,6 +11,8 @@ Last edited: 20 Feb 2023
 
 #include <vector>
 #include <sstream>
+#include <dirent.h>
+#include "tools.hpp"
 #include "params.hpp"
 #include "FileID.hpp"
 
