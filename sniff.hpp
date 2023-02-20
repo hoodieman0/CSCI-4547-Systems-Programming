@@ -3,13 +3,14 @@ CSCI-4547 Systems Programming
 sniff.hpp
 Author: James Mok
 Created: 18 Feb 2023
-Last edited: 18 Feb 2023
+Last edited: 20 Feb 2023
 */
 
 #ifndef SNIFF_HPP
 #define SNIFF_HPP
 
 #include <vector>
+#include <sstream>
 #include "params.hpp"
 #include "FileID.hpp"
 
