@@ -26,7 +26,7 @@ Sniff(int argc, char* argv[]){
 }
 
 
-// Constructs sniff class
+// 
 // Precondition: valid program arguments
 // Postcondition: params object is created
 void Sniff::
@@ -42,5 +42,5 @@ oneDir(){
     dent = readdir();
 
     cout << dent->d_name << endl;
-    
 }
+

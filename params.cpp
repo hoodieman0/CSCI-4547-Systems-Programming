@@ -53,6 +53,9 @@ Params(int argc, char* argv[]){
 		}
 	}
 
+	//TODO chdir here
+	//TODO use istringstream
+
 	// Ending Arguments
 	cout << "Ending Arguments: ";
 	for (optx = optind; optx < argc; optx++){
