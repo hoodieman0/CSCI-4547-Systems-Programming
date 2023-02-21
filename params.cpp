@@ -45,13 +45,9 @@ Params(int argc, char* argv[]){
 		}
 	}
 
-	// Ending Arguments
-	cout << "Ending Arguments: ";
-	for (optx = optind; optx < argc; optx++){
-		cout <<"\"" <<argv[optx] << "\" ";
-		keywords.push_back(argv[optx]);
+	if (argv[optind]){
+		keywords.assign(argv[optind]);
 	}
-    cout <<endl;
 }
 
 // Prints the all the data members of the params class
@@ -70,5 +66,5 @@ print(ostream& out){
 // Postcondition: none
 void Params::
 usage(){
-	cout <<"Usage: sniff [-v||--verbose] [-h ||--help] [-o filename] [-d||--dir directory] [-c] string" << endl;
+	cout <<"Usage: sniff [-v||--verbose] [-h ||--help] [-o filename] [-d||--dir directory] [-c] 'Words to search for'" << endl;
 }

@@ -9,7 +9,7 @@ private:
 	char* startDir;
 	char* outFileName;
 	ofstream out;
-	vector<string> keywords;
+	string keywords;
 	// Switches: v, h, o, d, c
 	bool verbose = false, help = false, fileOutput = false, directorySearch = false, caseInsensitive = false;
 public:
