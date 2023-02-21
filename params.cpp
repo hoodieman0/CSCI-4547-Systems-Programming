@@ -45,6 +45,7 @@ Params(int argc, char* argv[]){
 		}
 	}
 
+	// Convert keywords from cstring to string
 	if (argv[optind]){
 		keywords.assign(argv[optind]);
 	}
