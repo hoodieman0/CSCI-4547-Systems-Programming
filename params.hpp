@@ -1,6 +1,8 @@
 #include <fstream>
 #include <iostream>
 
+#pragma once
+
 using namespace std;
 
 class Params{
@@ -17,4 +19,6 @@ public:
 
 	void print(ostream& out);
 	void usage();
+	char* getStartDir();
+	const string getKeywords();
 };

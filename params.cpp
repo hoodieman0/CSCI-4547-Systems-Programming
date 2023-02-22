@@ -6,7 +6,7 @@
 // Postcondition: params object is created
 Params::
 Params(int argc, char* argv[]){
-	int ch, optx;
+	int ch;
 
 	// Long switch equivalents
 	const option longOpts[] = {
@@ -68,4 +68,15 @@ print(ostream& out){
 void Params::
 usage(){
 	cout <<"Usage: sniff [-v||--verbose] [-h ||--help] [-o filename] [-d||--dir directory] [-c] 'Words to search for'" << endl;
+}
+
+char* Params::
+getStartDir(){
+	//string s(startDir);
+	return startDir;
+}
+
+const string Params::
+getKeywords(){
+	return keywords;
 }
