@@ -15,3 +15,8 @@ addKeyword(string word){
 	}
 	keywords.push_back(word);
 }
+
+const string FileID::
+getName(){
+	return filename;
+}

@@ -1,7 +1,8 @@
 #include <vector>
-#include <dirent.h>
 #include <sstream>
 #include <unistd.h>
+#include <dirent.h>
+#include <sys/stat.h>
 #include "params.hpp"
 #include "FileID.hpp"
 
@@ -12,10 +13,11 @@ private:
 	string pathname;
 	vector<string> words;
 	vector<FileID> flaggedFiles;
-	struct dirent;
+	struct dirent* entry;
 public:
 	Sniff(Params& p);
 	~Sniff() = default;
 
 	void oneDir();
+	FileID oneFile(string name, int iNode, string path);
 };

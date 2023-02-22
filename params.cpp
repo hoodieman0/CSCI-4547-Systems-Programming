@@ -39,6 +39,7 @@ Params(int argc, char* argv[]){
 				break;
 			case 'h': // print helpful information to run program
 				help = true;
+				break;
 			default:
 				usage();
 				break;
@@ -74,6 +75,30 @@ char* Params::
 getStartDir(){
 	//string s(startDir);
 	return startDir;
+}
+
+bool Params::
+getSwitch(char s){
+	switch (s){
+			case 'o': // send to file
+				return fileOutput;
+				break;
+			case 'd': // search from directory
+				return directorySearch;
+				break;
+			case 'v': // print processed files/directories to cout
+				return verbose;
+				break;
+			case 'c': // is inputted string case sensitive
+				return caseInsensitive;
+				break;
+			case 'h': // print helpful information to run program
+				return help;
+				break;
+			default:
+				return false;
+				break;
+		}
 }
 
 const string Params::

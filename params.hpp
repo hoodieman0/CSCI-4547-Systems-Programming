@@ -20,5 +20,6 @@ public:
 	void print(ostream& out);
 	void usage();
 	char* getStartDir();
+	bool getSwitch(char s);
 	const string getKeywords();
 };
