@@ -15,6 +15,14 @@ addKeyword(string word){
 	keywords.push_back(word);
 }
 
+bool FileID::
+keywordFound(){
+	if (keywords.size())
+		return true;
+	else
+		return false;
+}
+
 const string FileID::
 getName(){
 	return filename;

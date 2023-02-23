@@ -18,6 +18,7 @@ Sniff(Params& p) : parameters(&p){
 
 void Sniff::
 oneDir(){
+	FileID file;
 	struct stat* s = new struct stat;
 	DIR* currentDir = opendir(getcwd(nullptr, 0));
 
@@ -32,9 +33,14 @@ oneDir(){
 
 		if (S_ISREG(s->st_mode) || S_ISDIR(s->st_mode)){
 			if (parameters->getSwitch('v')) cout <<entry->d_name <<endl;
+
+			file = oneFile(entry->d_name, s->st_ino, pathname);
+			if (file.keywordFound())
+				flaggedFiles.push_back(file);
 		}
 	}
 
+	cout <<"Directory processed\n";
 	closedir(currentDir);
 	delete s;
 }
@@ -47,17 +53,17 @@ oneFile(string name, int iNode, string path){
 
 	for (;;){
 		in >>input;
-		if (in.eof()) break;
-
 		compare = stripString(input);
 
 		for (string w : words){
+			
 			if (parameters->getSwitch('c')){
 				if (caseInsensitiveCompare(w, compare)) f.addKeyword(compare);
 			} 
 			else if (w == compare) 
 				f.addKeyword(compare);
 		}
+		if (in.eof()) break;
 	}
 
 	in.close();
@@ -84,6 +90,6 @@ caseInsensitiveCompare(string s1, string s2){
 	for (unsigned int i = 0; i < s2.size(); i++){
 		string2 += tolower(s2[i]);
 	}
-	
+
 	return string1 == string2;
 }
