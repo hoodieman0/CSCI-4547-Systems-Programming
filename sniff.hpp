@@ -13,11 +13,9 @@ private:
 	char* firstDir;
 	string pathname;
 	vector<string> words;
-	
+	vector<FileID> flaggedFiles;	
 	struct dirent* entry;
 public:
-	vector<FileID> flaggedFiles;
-
 	Sniff(Params& p);
 	~Sniff() = default;
 

@@ -71,12 +71,15 @@ usage(){
 	cout <<"Usage: sniff [-v||--verbose] [-h ||--help] [-o filename] [-d||--dir directory] [-c] 'Words to search for'" << endl;
 }
 
+
+// Returns the starting directory as a cstring
 char* Params::
 getStartDir(){
-	//string s(startDir);
 	return startDir;
 }
 
+
+// Returns the boolean value for the passed in switch
 bool Params::
 getSwitch(char s){
 	switch (s){
@@ -101,6 +104,8 @@ getSwitch(char s){
 		}
 }
 
+
+// returns the keyword string
 const string Params::
 getKeywords(){
 	return keywords;

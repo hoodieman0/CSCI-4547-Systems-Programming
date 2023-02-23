@@ -7,6 +7,7 @@ print(ostream& out){
 	}
 }
 
+// Add word to vector of keywords if it is not already present
 void FileID::
 addKeyword(string word){
 	for (string s : keywords){
@@ -15,6 +16,7 @@ addKeyword(string word){
 	keywords.push_back(word);
 }
 
+// Returns true if any strings are present in the vector of keywords
 bool FileID::
 keywordFound(){
 	if (keywords.size())
