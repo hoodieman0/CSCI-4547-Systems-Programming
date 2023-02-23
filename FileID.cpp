@@ -2,9 +2,8 @@
 
 void FileID::
 print(ostream& out){
-	//out <<iNode <<"\t" <<pathname;
 	for (string s : keywords){
-		cout <<s;
+		cout <<s <<endl;
 	}
 }
 

@@ -9,5 +9,6 @@ int main(int argc, char* argv[]){
 	banner();
 	Params p(argc, argv);
 	Sniff s(p);
-	s.oneDir();
+	//FileID f("test.txt", 5, "/");
+	s.oneFile("test.txt", 0, "/").print(cout);
 }
