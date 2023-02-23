@@ -18,9 +18,10 @@ Sniff(Params& p) : parameters(&p){
 
 void Sniff::
 oneDir(){
+	char* buff = getcwd(nullptr, 0);
 	FileID file;
 	struct stat* s = new struct stat;
-	DIR* currentDir = opendir(getcwd(nullptr, 0));
+	DIR* currentDir = opendir(buff);
 
 	// Read and discard first 2 directory entries
 	readdir(currentDir);
@@ -42,6 +43,7 @@ oneDir(){
 
 	cout <<"Directory processed\n";
 	closedir(currentDir);
+	free(buff);
 	delete s;
 }
 
