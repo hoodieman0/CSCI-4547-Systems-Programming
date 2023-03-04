@@ -6,7 +6,7 @@
 // Postcondition: params object is created
 Params::
 Params(int argc, char* argv[]){
-	int ch, optx;
+	int ch;
 
 	// Long switch equivalents
 	const option longOpts[] = {
@@ -39,19 +39,17 @@ Params(int argc, char* argv[]){
 				break;
 			case 'h': // print helpful information to run program
 				help = true;
+				break;
 			default:
 				usage();
 				break;
 		}
 	}
 
-	// Ending Arguments
-	cout << "Ending Arguments: ";
-	for (optx = optind; optx < argc; optx++){
-		cout <<"\"" <<argv[optx] << "\" ";
-		keywords.push_back(argv[optx]);
+	// Convert keywords from cstring to string
+	if (argv[optind]){
+		keywords.assign(argv[optind]);
 	}
-    cout <<endl;
 }
 
 // Prints the all the data members of the params class
@@ -70,5 +68,45 @@ print(ostream& out){
 // Postcondition: none
 void Params::
 usage(){
-	cout <<"Usage: sniff [-v||--verbose] [-h ||--help] [-o filename] [-d||--dir directory] [-c] string" << endl;
+	cout <<"Usage: sniff [-v||--verbose] [-h ||--help] [-o filename] [-d||--dir directory] [-c] 'Words to search for'" << endl;
+}
+
+
+// Returns the starting directory as a cstring
+char* Params::
+getStartDir(){
+	return startDir;
+}
+
+
+// Returns the boolean value for the passed in switch
+bool Params::
+getSwitch(char s){
+	switch (s){
+			case 'o': // send to file
+				return fileOutput;
+				break;
+			case 'd': // search from directory
+				return directorySearch;
+				break;
+			case 'v': // print processed files/directories to cout
+				return verbose;
+				break;
+			case 'c': // is inputted string case sensitive
+				return caseInsensitive;
+				break;
+			case 'h': // print helpful information to run program
+				return help;
+				break;
+			default:
+				return false;
+				break;
+		}
+}
+
+
+// returns the keyword string
+const string Params::
+getKeywords(){
+	return keywords;
 }

@@ -1,0 +1,81 @@
+total 36
+-rw-r--r--. 2 seanva seanva  5 Feb 22 19:44 Cocoa2.txt
+-rw-r--r--. 2 seanva seanva  5 Feb 22 19:44 Cocoa.txt
+-rw-r--r--. 2 seanva seanva  6 Feb 22 19:44 Crunch2.txt
+-rw-r--r--. 2 seanva seanva  6 Feb 22 19:44 Crunch.txt
+lrwxrwxrwx. 1 seanva seanva 12 Feb 22 21:03 HersheysLink.txt -> Hersheys.txt
+-rw-r--r--. 1 seanva seanva  8 Feb 22 19:45 Hersheys.txt
+lrwxrwxrwx. 1 seanva seanva 10 Feb 22 21:03 KitKatLink.txt -> KitKat.txt
+-rw-r--r--. 1 seanva seanva  6 Feb 22 19:45 KitKat.txt
+-rw-r--r--. 1 seanva seanva 13 Feb 22 19:45 MilkChocolate.txt
+
+/============================================================/
+Command: ./sniff -d TestDir
+---------------------------------------------------------------
+	James Mok and Sean Vargas
+	CSCI 4547
+	Thu Feb 23 2023	00:26:04
+---------------------------------------------------------------
+Directory processed
+
+/============================================================/
+Command: ./sniff -d TestDir -v
+---------------------------------------------------------------
+	James Mok and Sean Vargas
+	CSCI 4547
+	Thu Feb 23 2023	00:27:08
+---------------------------------------------------------------
+Cocoa.txt
+Crunch.txt
+Hersheys.txt
+KitKat.txt
+MilkChocolate.txt
+Cocoa2.txt
+Crunch2.txt
+Directory processed
+/============================================================/
+Command: ./sniff -v
+---------------------------------------------------------------
+	James Mok and Sean Vargas
+	CSCI 4547
+	Thu Feb 23 2023	00:28:27
+---------------------------------------------------------------
+.git
+TestDir
+Project Documents
+tools.cpp
+tools.hpp
+main.cpp
+params.cpp
+params.hpp
+FileID.hpp
+FileID.cpp
+sniff.hpp
+sniff.cpp
+.gitignore
+sniff
+output.txt
+Directory processed
+/============================================================/
+Command: ./sniff
+---------------------------------------------------------------
+	James Mok and Sean Vargas
+	CSCI 4547
+	Thu Feb 23 2023	00:29:49
+---------------------------------------------------------------
+Directory processed
+/============================================================/
+Command: ./sniff -d TestDir -c --verbose
+---------------------------------------------------------------
+	James Mok and Sean Vargas
+	CSCI 4547
+	Thu Feb 23 2023	00:31:50
+---------------------------------------------------------------
+Cocoa.txt
+Crunch.txt
+Hersheys.txt
+KitKat.txt
+MilkChocolate.txt
+Cocoa2.txt
+Crunch2.txt
+Directory processed
