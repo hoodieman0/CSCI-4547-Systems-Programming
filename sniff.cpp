@@ -105,3 +105,17 @@ caseInsensitiveCompare(string s1, string s2){
 
 	return string1 == string2;
 }
+
+void Sniff::
+run(string startDir){
+	string current = startDir;
+	chdir(startDir.c_str());
+	travel(current);
+	flaggedFiles.push_back();
+	for (FileID file : flaggedFiles){
+		cout << "\n--------------------" << endl;
+		cout << file.getName() << endl;
+		file.print(cout);
+	}
+}
+
