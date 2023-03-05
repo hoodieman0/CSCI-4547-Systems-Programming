@@ -119,3 +119,42 @@ run(string startDir){
 	}
 }
 
+void Sniff::
+travel(string pathname, string dir){
+	FileID file;
+	char* cwd = getcwd(nullptr, 0);
+	struct stat* s = new struct stat;
+	DIR* currentDir = opendir(cwd);
+
+	// Read and discard first 2 directory entries
+	readdir(currentDir);
+	readdir(currentDir);
+
+	// Process the directory entries
+	for (;;){
+		entry = readdir(currentDir);
+		if (!entry) break;
+		lstat(entry->d_name, s);
+
+		// Check for type of directory entry
+		if (S_ISREG(s->st_mode)){
+			if (parameters->getSwitch('v')) cout <<entry->d_name <<endl;
+
+			file = oneFile(entry->d_name, s->st_ino, pathname);
+			if (file.keywordFound())
+				flaggedFiles.push_back(file);
+		}
+		else if (S_ISDIR(s->st_mode)){
+			if (parameters->getSwitch('v')) cout << "Dir: " << entry->d_name <<endl;
+			string dirString = pathname + "/" + entry->d_name;
+			chdir(dirString.c_str())
+			travel(dirString, )
+			chdir("..")
+		}
+	}
+
+	cout <<"Directory processed\n";
+	closedir(currentDir);
+	free(cwd);
+	delete s;
+}

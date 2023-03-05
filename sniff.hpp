@@ -24,4 +24,5 @@ public:
 	string stripString(string s);
 	bool caseInsensitiveCompare(string s1, string s2);
 	void run(string startDir);
+	void travel(string pathname, string dir);
 };
