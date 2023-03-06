@@ -9,5 +9,5 @@ int main(int argc, char* argv[]){
 	banner();
 	Params p(argc, argv);
 	Sniff s(p);
-	s.oneDir();
+	s.run();
 }

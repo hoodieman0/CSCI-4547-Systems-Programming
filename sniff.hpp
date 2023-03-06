@@ -23,6 +23,6 @@ public:
 	FileID oneFile(string name, int iNode, string path);
 	string stripString(string s);
 	bool caseInsensitiveCompare(string s1, string s2);
-	void run(string startDir);
-	void travel(string pathname, string dir);
+	void run();
+	void travel(string pname);
 };

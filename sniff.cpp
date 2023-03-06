@@ -107,10 +107,11 @@ caseInsensitiveCompare(string s1, string s2){
 }
 
 void Sniff::
-run(string startDir){
-	string current = startDir;
+run(){
+	string current = pathname;
 	chdir(current.c_str());
 	travel(current);
+	cout << "I'm back!" << endl;
 	for (FileID file : flaggedFiles){
 		cout << "\n--------------------" << endl;
 		cout << file.getName() << endl;
@@ -131,24 +132,23 @@ travel(string pname){
 
 	// Process the directory entries
 	for (;;){
-		entry = readdir(currentDir);
-		if (!entry) break;
-		lstat(entry->d_name, s);
+		dirent* unknown = readdir(currentDir);
+		if (!unknown) break;
+		lstat(unknown->d_name, s);
 
 		// Check for type of directory entry
 		if (S_ISREG(s->st_mode)){
-			if (parameters->getSwitch('v')) cout <<entry->d_name <<endl;
+			if (parameters->getSwitch('v')) cout <<unknown->d_name <<endl;
 
-			file = oneFile(entry->d_name, s->st_ino, pname);
+			file = oneFile(unknown->d_name, s->st_ino, pname);
 			if (file.keywordFound())
 				flaggedFiles.push_back(file);
 		}
 		else if (S_ISDIR(s->st_mode)){
-			string dirString = pname + "/" + entry->d_name;
+			string dirString = pname + "/" + unknown->d_name;
 			if (parameters->getSwitch('v')) cout << "Dir: " << dirString <<endl;
-			chdir(dirString.c_str());
-			travel(dirString);
-			chdir("..");
+			chdir(unknown->d_name);
+			travel(unknown->d_name);
 		}
 	}
 
