@@ -109,9 +109,8 @@ caseInsensitiveCompare(string s1, string s2){
 void Sniff::
 run(string startDir){
 	string current = startDir;
-	chdir(startDir.c_str());
+	chdir(current.c_str());
 	travel(current);
-	flaggedFiles.push_back();
 	for (FileID file : flaggedFiles){
 		cout << "\n--------------------" << endl;
 		cout << file.getName() << endl;
@@ -120,7 +119,7 @@ run(string startDir){
 }
 
 void Sniff::
-travel(string pathname, string dir){
+travel(string pname){
 	FileID file;
 	char* cwd = getcwd(nullptr, 0);
 	struct stat* s = new struct stat;
@@ -140,16 +139,16 @@ travel(string pathname, string dir){
 		if (S_ISREG(s->st_mode)){
 			if (parameters->getSwitch('v')) cout <<entry->d_name <<endl;
 
-			file = oneFile(entry->d_name, s->st_ino, pathname);
+			file = oneFile(entry->d_name, s->st_ino, pname);
 			if (file.keywordFound())
 				flaggedFiles.push_back(file);
 		}
 		else if (S_ISDIR(s->st_mode)){
-			if (parameters->getSwitch('v')) cout << "Dir: " << entry->d_name <<endl;
-			string dirString = pathname + "/" + entry->d_name;
-			chdir(dirString.c_str())
-			travel(dirString, )
-			chdir("..")
+			string dirString = pname + "/" + entry->d_name;
+			if (parameters->getSwitch('v')) cout << "Dir: " << dirString <<endl;
+			chdir(dirString.c_str());
+			travel(dirString);
+			chdir("..");
 		}
 	}
 
