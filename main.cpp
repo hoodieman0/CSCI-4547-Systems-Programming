@@ -10,4 +10,5 @@ int main(int argc, char* argv[]){
 	Params p(argc, argv);
 	Sniff s(p);
 	s.run();
+	bye();
 }
