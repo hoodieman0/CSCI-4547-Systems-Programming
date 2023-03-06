@@ -32,3 +32,9 @@
 *.app
 
 sniff
+
+.vscode/
+
+TestDir/March/DIOLINK
+
+TestDir/March/SNOWLINK.txt
