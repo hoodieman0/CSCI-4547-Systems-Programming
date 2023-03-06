@@ -107,8 +107,6 @@ caseInsensitiveCompare(string s1, string s2){
 
 void Sniff::
 run(){
-	//current = startDir;
-	//pathname = startDir;
 	chdir(startDir);
 	travel(pathname, startDir);
 	for (FileID f : flaggedFiles){
