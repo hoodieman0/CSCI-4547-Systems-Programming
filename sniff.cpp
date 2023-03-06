@@ -106,12 +106,20 @@ caseInsensitiveCompare(string s1, string s2){
 	return string1 == string2;
 }
 
+// Main entry for the sniff class. Recursively travel the given 
+// directory using the given params, searching for any non-binary files that
+// have the given keywords
+// Precondition: Valid sniff object exists
+// Postcondition: no return, sends files with keywords to console
+//				  if -v is used, show all processed files and dirs
 void Sniff::
 run(){
 	string current = pathname;
 	chdir(current.c_str());
 	travel(current);
 
+	// Once recursion is done, if there are any marked files
+	// print them
 	for (FileID file : flaggedFiles){
 		cout << "\n--------------------" << endl;
 		cout << file.getName() << endl;
@@ -119,6 +127,11 @@ run(){
 	}
 }
 
+// Recursively search directories to find files with matching keywords.
+// Similar to Sniff::oneDir() but changes the next dir to the next subdirectory.
+// Precondition: Valid pathname is set from params object, Sniff::run() is called
+// Postcondition: flagedfiles vector is populated with matching keyword files.
+//				  If the given entry is a directory, call travel() on that directory.
 void Sniff::
 travel(string pname){
 	FileID file;
@@ -136,7 +149,7 @@ travel(string pname){
 		if (!entry) break;
 		lstat(entry->d_name, s);
 
-		// Check for type of directory entry
+		// is entry a file?
 		if (S_ISREG(s->st_mode)){
 			if (parameters->getSwitch('v')) cout <<entry->d_name <<endl;
 
@@ -144,16 +157,17 @@ travel(string pname){
 			if (file.keywordFound())
 				flaggedFiles.push_back(file);
 		}
+		// is entry a directory?
 		else if (S_ISDIR(s->st_mode)){
 			string dirString = pname + "/" + entry->d_name;
 			if (parameters->getSwitch('v')) cout << "Directory: " << dirString <<endl;
-			chdir(entry->d_name);
-			travel(dirString);
-			chdir("..");
+			chdir(entry->d_name); // next directory
+			travel(dirString); // recursively go to the next directory
+			chdir(".."); // the directory before the recursive call
 		}
 	}
 
-	cout <<"Directory processed!\n" << endl;
+	cout << pname << " processed!\n" << endl;
 	closedir(currentDir);
 	free(cwd);
 	delete s;
