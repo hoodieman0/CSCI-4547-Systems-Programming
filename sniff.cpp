@@ -3,8 +3,8 @@
 // Sniff constructor
 Sniff::
 Sniff(Params& p) : parameters(&p){
-	current = p.getStartDir();
-	pathname = current;
+	startDir = p.getStartDir();
+	pathname = startDir;
 
 	istringstream s(p.getKeywords());
 	string word;
@@ -14,7 +14,7 @@ Sniff(Params& p) : parameters(&p){
 		if (s.eof()) break;
 	}
 
-	chdir(current);
+	chdir(startDir);
 }
 
 // Process one directory
@@ -109,8 +109,8 @@ void Sniff::
 run(){
 	//current = startDir;
 	//pathname = startDir;
-	chdir(current);
-	travel(pathname, current);
+	chdir(startDir);
+	travel(pathname, startDir);
 	for (FileID f : flaggedFiles){
 		cout <<endl;
 		cout <<"Filename: " <<f.getName() <<endl;
