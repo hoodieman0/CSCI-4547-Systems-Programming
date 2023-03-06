@@ -146,9 +146,10 @@ travel(string pname){
 		}
 		else if (S_ISDIR(s->st_mode)){
 			string dirString = pname + "/" + unknown->d_name;
-			if (parameters->getSwitch('v')) cout << "Dir: " << dirString <<endl;
+			if (parameters->getSwitch('v')) cout << "Directory: " << dirString <<endl;
 			chdir(unknown->d_name);
-			travel(unknown->d_name);
+			travel(dirString);
+			chdir("..");
 		}
 	}
 
