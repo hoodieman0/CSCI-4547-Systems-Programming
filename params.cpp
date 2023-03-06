@@ -47,9 +47,12 @@ Params(int argc, char* argv[]){
 	}
 
 	// Convert keywords from cstring to string
-	if (argv[optind]){
-		keywords.assign(argv[optind]);
+	while (argv[optind]){
+		keywords += argv[optind];
+		keywords += " ";
+		optind++;
 	}
+
 }
 
 // Prints the all the data members of the params class
