@@ -147,12 +147,12 @@ travel(string pname, char* current){
 			if (parameters->getSwitch('v')) cout <<entry->d_name <<endl;
 			chdir(entry->d_name);
 			travel(pname + '/' + entry->d_name, entry->d_name);
+			chdir("..");
 		}
 	}
 
 	cout <<"Directory processed\n";
 	closedir(currentDir);
-	chdir("..");
 
 	free(cwd);
 	delete s;
