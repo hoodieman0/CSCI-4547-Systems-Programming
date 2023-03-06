@@ -107,11 +107,11 @@ caseInsensitiveCompare(string s1, string s2){
 
 void Sniff::
 run(){
-	chdir(startDir);
+	//chdir(startDir);
 	travel(pathname, startDir);
 	for (FileID f : flaggedFiles){
 		cout <<endl;
-		cout <<"Filename: " <<f.getName() <<endl;
+		cout <<"Filename: " <<f.getName() <<"\tPathname: " <<f.getPath() <<endl;
 		f.print(cout);
 	}
 }
@@ -137,7 +137,7 @@ travel(string pname, char* current){
 		if (S_ISREG(s->st_mode)){
 			if (parameters->getSwitch('v')) cout <<entry->d_name <<endl;
 
-			file = oneFile(entry->d_name, s->st_ino, pname);
+			file = oneFile(entry->d_name, s->st_ino, pname + '/');
 			if (file.keywordFound())
 				flaggedFiles.push_back(file);
 		}
