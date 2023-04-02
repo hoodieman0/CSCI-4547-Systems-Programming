@@ -2,7 +2,7 @@
 CXXFLAGS = -g -Wall
 
 # C++ file objects
-OBJ = main.o FileID.o params.o sniff.o tools.o jobs.o
+OBJ = main.o FileID.o params.o sniff.o tools.o jobs.o JobTable.o
 
 # Main entry
 all: sniff
@@ -26,6 +26,9 @@ params.o: params.cpp params.hpp
 
 jobs.o: jobs.cpp jobs.hpp
 	g++ -c $(CXXFLAGS) jobs.cpp
+
+JobTable.o: JobTable.cpp JobTable.hpp
+	g++ -c $(CXXFLAGS) JobTable.cpp
 
 # Create the tools.o object file
 tools.o: tools.hpp tools.cpp 
