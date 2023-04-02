@@ -3,8 +3,8 @@
 // Sniff constructor
 Sniff::
 Sniff(Params& p) : parameters(&p){
-	firstDir = p.getStartDir();
-	pathname = firstDir;
+	startDir = p.getStartDir();
+	pathname = startDir;
 
 	istringstream s(p.getKeywords());
 	string word;
@@ -14,7 +14,7 @@ Sniff(Params& p) : parameters(&p){
 		if (s.eof()) break;
 	}
 
-	chdir(firstDir);
+	chdir(startDir);
 }
 
 // Process one directory
@@ -66,7 +66,6 @@ oneFile(string name, int iNode, string path){
 		compare = stripString(input);
 
 		for (string w : words){
-			
 			if (parameters->getSwitch('c')){
 				if (caseInsensitiveCompare(w, compare)) f.addKeyword(compare);
 			} 
@@ -104,4 +103,55 @@ caseInsensitiveCompare(string s1, string s2){
 	}
 
 	return string1 == string2;
+}
+
+void Sniff::
+run(){
+	//chdir(startDir);
+	travel(pathname, startDir);
+	for (FileID f : flaggedFiles){
+		cout <<endl;
+		cout <<"Filename: " <<f.getName() <<"\tPathname: " <<f.getPath() <<endl;
+		f.print(cout);
+	}
+}
+
+void Sniff::
+travel(string pname, char* current){
+	FileID file;
+	char* cwd = getcwd(nullptr, 0);
+	struct stat* s = new struct stat;
+	DIR* currentDir = opendir(cwd);
+
+	// Read and discard first 2 directory entries
+	readdir(currentDir);
+	readdir(currentDir);
+
+	// Process the directory entries
+	for (;;){
+		entry = readdir(currentDir);
+		if (!entry) break;
+		lstat(entry->d_name, s);
+
+		// Check for type of directory entry
+		if (S_ISREG(s->st_mode)){
+			if (parameters->getSwitch('v')) cout <<entry->d_name <<endl;
+
+			file = oneFile(entry->d_name, s->st_ino, pname + '/');
+			if (file.keywordFound())
+				flaggedFiles.push_back(file);
+		}
+		else if (S_ISDIR(s->st_mode)){
+			if (parameters->getSwitch('v')) cout <<entry->d_name <<endl;
+			chdir(entry->d_name);
+			travel(pname + '/' + entry->d_name, entry->d_name);
+			chdir("..");
+		}
+	}
+
+	cout <<"Directory processed\n";
+	closedir(currentDir);
+
+	free(cwd);
+	delete s;
 }

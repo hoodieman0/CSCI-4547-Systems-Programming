@@ -29,3 +29,8 @@ const string FileID::
 getName(){
 	return filename;
 }
+
+const string FileID::
+getPath(){
+	return pathname;
+}

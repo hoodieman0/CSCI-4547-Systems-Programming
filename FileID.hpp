@@ -21,4 +21,5 @@ public:
 	void addKeyword(string word);
 	bool keywordFound();
 	const string getName();
+	const string getPath();
 };

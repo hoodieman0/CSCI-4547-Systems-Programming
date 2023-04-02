@@ -10,7 +10,7 @@
 class Sniff{
 private:
 	Params* parameters;
-	char* firstDir;
+	char* startDir;
 	string pathname;
 	vector<string> words;
 	vector<FileID> flaggedFiles;	
@@ -23,4 +23,6 @@ public:
 	FileID oneFile(string name, int iNode, string path);
 	string stripString(string s);
 	bool caseInsensitiveCompare(string s1, string s2);
+	void run();
+	void travel(string pathname, char* current);
 };
