@@ -23,3 +23,12 @@ chooseJob(string kidname, int jobNumber){
     workerName = kidname;
     // what do I do with jobNumber?
 }
+
+// Lets other kids know that the current job is done
+// Precondition: Job class exists, chooseJob has been run
+// Postcondition: Job is completed, done field is set to true
+void Job::
+announceDone(){
+    cout << "Job is done!" << endl;
+    // where should I put the done field?
+}
