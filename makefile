@@ -28,7 +28,7 @@ jobs.o: jobs.cpp jobs.hpp
 	g++ -c $(CXXFLAGS) jobs.cpp
 
 # Create the tools.o object file
-tools.cpp: tools.hpp tools.cpp 
+tools.o: tools.hpp tools.cpp 
 	g++ -c $(CXXFLAGS) tools.cpp
 
 # Remove all the newly created files
