@@ -10,7 +10,7 @@
 class Sniff{
 private:
 	Params* parameters;
-	char* firstDir;
+	char* startDir;
 	string pathname;
 	vector<string> words;
 	vector<FileID> flaggedFiles;	

@@ -3,8 +3,8 @@
 // Sniff constructor
 Sniff::
 Sniff(Params& p) : parameters(&p){
-	firstDir = p.getStartDir();
-	pathname = firstDir;
+	startDir = p.getStartDir();
+	pathname = startDir;
 
 	istringstream s(p.getKeywords());
 	string word;
@@ -14,7 +14,7 @@ Sniff(Params& p) : parameters(&p){
 		if (s.eof()) break;
 	}
 
-	chdir(firstDir);
+	chdir(startDir);
 }
 
 // Process one directory
@@ -66,7 +66,6 @@ oneFile(string name, int iNode, string path){
 		compare = stripString(input);
 
 		for (string w : words){
-			
 			if (parameters->getSwitch('c')){
 				if (caseInsensitiveCompare(w, compare)) f.addKeyword(compare);
 			} 
