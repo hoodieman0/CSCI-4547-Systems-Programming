@@ -1,5 +1,6 @@
 #include <vector>
 #include "sharedData.hpp"
+#include "kid.hpp"
 
 #pragma once
 

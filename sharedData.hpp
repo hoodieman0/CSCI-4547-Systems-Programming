@@ -11,7 +11,7 @@ public:
 	void initialize();
 };
 
-static void* kidMain(void* arg){
+/*static void* kidMain(void* arg){
 	// Cast arg to Kid and call Kid::run
 	return nullptr;
-}
+}*/

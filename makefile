@@ -1,7 +1,7 @@
 # Compiler flags
 CXXFLAGS = -Wall -std=c++17
 # Object files
-OBJ = build/main.o build/job.o build/mom.o build/jobTable.o build/tools.o
+OBJ = build/main.o build/job.o build/mom.o build/kid.o build/jobTable.o build/tools.o
 # Build folder for .o files
 BUILD = build
 # Compile target
@@ -21,14 +21,17 @@ build:
 	mkdir -p $(BUILD)
 
 # Dependencies
-$(BUILD)/main.o: main.cpp mom.hpp
+$(BUILD)/main.o: main.cpp mom.hpp kid.hpp job.hpp sharedData.hpp tools.hpp
 	c++ $(CXXFLAGS) -c main.cpp -o $(BUILD)/main.o
 
 $(BUILD)/job.o: job.cpp job.hpp
 	c++ $(CXXFLAGS) -c job.cpp -o $(BUILD)/job.o
 
-$(BUILD)/mom.o: mom.cpp mom.hpp sharedData.hpp
+$(BUILD)/mom.o: mom.cpp mom.hpp
 	c++ $(CXXFLAGS) -c mom.cpp -o $(BUILD)/mom.o
+
+$(BUILD)/kid.o: kid.cpp kid.hpp
+	c++ $(CXXFLAGS) -c kid.cpp -o $(BUILD)/kid.o
 
 $(BUILD)/jobTable.o: sharedData.hpp jobTable.cpp
 	c++ $(CXXFLAGS) -c jobTable.cpp -o $(BUILD)/jobTable.o
