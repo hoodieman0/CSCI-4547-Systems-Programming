@@ -8,9 +8,8 @@ private:
 	short time, dirtiness, difficulty;
 	int value;
 	string kidName;
-	
-public:
 	jobStat status;
+public:
 	Job();
 	void chooseJob(string name, int jobNumber);
 	void announceDone();

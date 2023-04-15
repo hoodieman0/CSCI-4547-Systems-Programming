@@ -21,7 +21,7 @@ build:
 	mkdir -p $(BUILD)
 
 # Dependencies
-$(BUILD)/main.o: main.cpp
+$(BUILD)/main.o: main.cpp sharedData.hpp
 	c++ $(CXXFLAGS) -c main.cpp -o $(BUILD)/main.o
 
 $(BUILD)/job.o: job.cpp job.hpp
