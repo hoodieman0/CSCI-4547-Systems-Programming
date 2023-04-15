@@ -1,25 +1,31 @@
 # Compiler flags
 CXXFLAGS = -Wall -std=c++17
 # Object files
-OBJ = main.o job.o tools.o
+OBJ = build/main.o build/job.o build/tools.o
+# Build folder for .o files
+BUILD = build
 # Compile target
 TARGET = Threads
 
 # Link object files and produce executable
-$(TARGET): $(OBJ)
+$(TARGET): $(BUILD) $(OBJ)
 	c++ $(CXXFLAGS) $(OBJ) -o $(TARGET)
-	rm $(OBJ)
 
 # Delete executable
 clean:
+	rm -r $(BUILD)
 	rm $(TARGET)
 
+# Make build directory
+build:
+	mkdir -p $(BUILD)
+
 # Dependencies
-main.o: main.cpp
-	c++ $(CXXFLAGS) -c main.cpp
+$(BUILD)/main.o: main.cpp
+	c++ $(CXXFLAGS) -c main.cpp -o $(BUILD)/main.o
 
-job.o: job.cpp job.hpp
-	c++ $(CXXFLAGS) -c job.cpp
+$(BUILD)/job.o: job.cpp job.hpp
+	c++ $(CXXFLAGS) -c job.cpp -o $(BUILD)/job.o
 
-tools.o: tools.cpp tools.hpp
-	c++ $(CXXFLAGS) -c tools.cpp
+$(BUILD)/tools.o: tools.cpp tools.hpp
+	c++ $(CXXFLAGS) -c tools.cpp -o $(BUILD)/tools.o
