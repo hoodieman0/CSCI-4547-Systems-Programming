@@ -13,4 +13,5 @@ public:
 	Job();
 	void chooseJob(string name, int jobNumber);
 	void announceDone();
+	bool isComplete();
 };

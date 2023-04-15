@@ -19,3 +19,9 @@ void Job::
 announceDone(){
 	status = complete;
 }
+
+bool Job::
+isComplete(){
+	if (status == complete) return true;
+	else return false;
+}

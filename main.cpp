@@ -1,10 +1,8 @@
-#include "job.hpp"
-#include "sharedData.hpp"
+#include "mom.hpp"
 
 using namespace std;
 
 int main(){
 	srand(time(NULL));
-	long i = 5;
-	kidMain((void*)i);
+	Mom m;
 }
