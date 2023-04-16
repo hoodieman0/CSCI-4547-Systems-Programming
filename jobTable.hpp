@@ -10,8 +10,3 @@ public:
 	bool quitflag = false;
 	void initialize();
 };
-
-/*static void* kidMain(void* arg){
-	// Cast arg to Kid and call Kid::run
-	return nullptr;
-}*/

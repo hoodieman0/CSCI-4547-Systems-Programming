@@ -11,7 +11,7 @@ TARGET = Threads
 $(TARGET): $(BUILD) $(OBJ)
 	c++ $(CXXFLAGS) $(OBJ) -o $(TARGET)
 
-# Delete executable
+# Delete executable and build folder
 clean:
 	rm -r $(BUILD)
 	rm $(TARGET)
@@ -21,7 +21,7 @@ build:
 	mkdir -p $(BUILD)
 
 # Dependencies
-$(BUILD)/main.o: main.cpp mom.hpp kid.hpp job.hpp sharedData.hpp tools.hpp
+$(BUILD)/main.o: main.cpp mom.hpp kid.hpp job.hpp jobTable.hpp tools.hpp
 	c++ $(CXXFLAGS) -c main.cpp -o $(BUILD)/main.o
 
 $(BUILD)/job.o: job.cpp job.hpp
@@ -33,7 +33,7 @@ $(BUILD)/mom.o: mom.cpp mom.hpp
 $(BUILD)/kid.o: kid.cpp kid.hpp
 	c++ $(CXXFLAGS) -c kid.cpp -o $(BUILD)/kid.o
 
-$(BUILD)/jobTable.o: sharedData.hpp jobTable.cpp
+$(BUILD)/jobTable.o: jobTable.hpp jobTable.cpp
 	c++ $(CXXFLAGS) -c jobTable.cpp -o $(BUILD)/jobTable.o
 
 $(BUILD)/tools.o: tools.cpp tools.hpp

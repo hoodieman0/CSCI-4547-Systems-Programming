@@ -1,4 +1,4 @@
 #pragma once
 
-enum mood {Lazy, Prissy, Overtired, Greedy, Cooperative};
+enum mood {lazy, prissy, overtired, greedy, cooperative};
 enum jobStat {notStarted, working, complete};

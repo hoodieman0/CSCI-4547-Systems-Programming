@@ -13,5 +13,9 @@ public:
 	Job();
 	void chooseJob(string name, int jobNumber);
 	void announceDone();
-	bool isComplete();
+	inline const jobStat getStatus(){ return status; };
+	inline const short getTime(){ return time; };
+	inline const short getDirtiness(){ return dirtiness; };
+	inline const short getDifficulty(){ return difficulty; };
+	inline const int getValue(){ return value; };
 };
