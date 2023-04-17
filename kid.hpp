@@ -10,18 +10,18 @@ private:
 	mood kidMood;
 	vector<Job> completedJobs;
 	JobTable* jobs;
-	
-	Job lazyJob();
-	Job shortJob();
-	Job cleanJob();
-	Job greedyJob();
-	Job anyJob();
+
+	Job* lazyJob();
+	Job* shortJob();
+	Job* cleanJob();
+	Job* greedyJob();
+	Job* anyJob();
 	static void signalHandler(int sig){ if (sig == SIGQUIT) quitflag = true; };
 public:
 	Kid() = default;
 	Kid(string kidName, JobTable* table);
 	void run();
-	Job pickJob();
+	Job* pickJob();
 	stringstream print() const;
 	inline void chooseMood(){ kidMood = (mood)(rand() % 5); };
 };

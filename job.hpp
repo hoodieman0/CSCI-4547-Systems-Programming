@@ -5,7 +5,6 @@
 
 class Job{
 private:
-	static int total;
 	short time, dirtiness, difficulty;
 	int value;
 	string kidName;
@@ -20,4 +19,5 @@ public:
 	inline const short getDirtiness(){ return dirtiness; };
 	inline const short getDifficulty(){ return difficulty; };
 	inline const int getValue(){ return value; };
+	inline const string getName(){ return kidName; };
 };

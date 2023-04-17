@@ -5,7 +5,7 @@ Kid(string kidName, JobTable* table) : name(kidName), jobs(table){}
 
 void Kid::
 run(){
-	Job curJob;
+	Job* curJob;
 	int signo;
 	sigset_t signals;
 
@@ -20,13 +20,16 @@ run(){
 	sigwait(&signals, &signo);
 
 	if (signo == SIGUSR1){
+		cout <<"SIGUSR1 received\n";
 		for (;;){
 			curJob = pickJob();
-			sleep(curJob.getTime());
+			cout <<"Job picked\n";
+			sleep(curJob->getTime());
 			if (quitflag) break;
 			else{
-				completedJobs.push_back(curJob);
-				curJob.announceDone();
+				curJob->announceDone();
+				completedJobs.push_back(*curJob);
+				cout <<"Job finished, Job status: " <<curJob->getStatus() <<endl;
 			}
 		}
 	}
@@ -37,40 +40,31 @@ run(){
 		moneyEarned += j.getValue();
 	}
 	output <<"Quit receieved\n";
-	output <<"Completed jobs: \n";
+	output <<name <<" completed jobs: \n";
 	for (long unsigned i = 0; i < completedJobs.size(); i++){
-		output <<"Job " <<i <<" Value: " <<completedJobs[i].getValue() <<endl;
+		output <<"Job " <<i + 1 <<", Value: " <<setw(3) <<completedJobs[i].getValue() <<"\t" <<completedJobs[i].getStatus() <<endl;
 	}
 	output <<"Total money earned: " <<moneyEarned <<endl;
 	cout <<output.str();
 }
 
-Job Kid::
+Job* Kid::
 pickJob(){
-	Job j;
-
 	switch (kidMood){
 		case lazy:
-			j = lazyJob();
-			break;
+			return lazyJob();
 		case overtired:
-			j = shortJob();
-			break;
+			return shortJob();
 		case prissy:
-			j = cleanJob();
-			break;
+			return cleanJob();
 		case greedy:
-			j = greedyJob();
-			break;
+			return greedyJob();
 		case cooperative:
-			j = anyJob();
-			break;
+			return anyJob();
 	}
-
-	return j;
 }
 
-Job Kid::
+Job* Kid::
 lazyJob(){
 	int jobIndex;
 	short compare, difficulty = 6;
@@ -87,10 +81,10 @@ lazyJob(){
 	jobs->jobs[jobIndex].chooseJob(name, jobIndex);
 	pthread_mutex_unlock(&jobs->mtx);
 
-	return jobs->jobs[jobIndex];
+	return &jobs->jobs[jobIndex];
 }
 
-Job Kid::
+Job* Kid::
 shortJob(){
 	int jobIndex;
 	short compare, time = 6;
@@ -107,10 +101,10 @@ shortJob(){
 	jobs->jobs[jobIndex].chooseJob(name, jobIndex);
 	pthread_mutex_unlock(&jobs->mtx);
 
-	return jobs->jobs[jobIndex];
+	return &jobs->jobs[jobIndex];
 }
 
-Job Kid::
+Job* Kid::
 cleanJob(){
 	int jobIndex;
 	short compare, dirtiness = 6;
@@ -127,10 +121,10 @@ cleanJob(){
 	jobs->jobs[jobIndex].chooseJob(name, jobIndex);
 	pthread_mutex_unlock(&jobs->mtx);
 
-	return jobs->jobs[jobIndex];
+	return &jobs->jobs[jobIndex];
 }
 
-Job Kid::
+Job* Kid::
 greedyJob(){
 	int jobIndex;
 	short compare, value = 6;
@@ -147,10 +141,10 @@ greedyJob(){
 	jobs->jobs[jobIndex].chooseJob(name, jobIndex);
 	pthread_mutex_unlock(&jobs->mtx);
 
-	return jobs->jobs[jobIndex];
+	return &jobs->jobs[jobIndex];
 }
 
-Job Kid::
+Job* Kid::
 anyJob(){
 	int jobIndex;
 
@@ -165,7 +159,7 @@ anyJob(){
 	jobs->jobs[jobIndex].chooseJob(name, jobIndex);
 	pthread_mutex_unlock(&jobs->mtx);
 
-	return jobs->jobs[jobIndex];
+	return &jobs->jobs[jobIndex];
 }
 
 stringstream Kid::
