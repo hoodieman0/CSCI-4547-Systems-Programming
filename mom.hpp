@@ -24,6 +24,7 @@ public:
 inline ostream& operator<<(ostream& out, const Mom& m){ return out <<m.print().str(); };
 
 static void* kidMain(void* arg){
-	// Cast arg to Kid and call Kid::run
+	Kid* k = (Kid*)arg;
+	k->run();
 	pthread_exit(NULL);
 }

@@ -5,11 +5,13 @@
 
 class Job{
 private:
+	static int total;
 	short time, dirtiness, difficulty;
 	int value;
 	string kidName;
 	jobStat status;
 public:
+	int id;
 	Job();
 	void chooseJob(string name, int jobNumber);
 	void announceDone();

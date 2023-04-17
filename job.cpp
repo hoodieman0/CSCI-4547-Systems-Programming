@@ -1,7 +1,11 @@
 #include "job.hpp"
 
+int Job::total = 0;
+
 Job::
 Job(){
+	id = total;
+	total++;
 	time = rand() % 5 + 1;
 	dirtiness = rand() % 5 + 1;
 	difficulty = rand() % 5 + 1;

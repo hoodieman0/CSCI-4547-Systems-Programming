@@ -30,6 +30,30 @@ run(){
 	}
 
 	startTime = time(NULL);
+
+	sleep(1);
+	for (int i = 0; i < 4; i++){
+		errorCode = pthread_kill(threads[i], SIGUSR1);
+		if (errorCode) fatal("Failed to sent start signal to thread %d, Error code: %d", i, errorCode);
+	}
+
+	for(;;){
+		sleep(1);
+		curTime = time(NULL);
+		if (curTime - startTime >= 21) break;
+
+		findComplete();
+	}
+
+	for (int i = 0; i < 4; i++){
+		errorCode = pthread_kill(threads[i], SIGQUIT);
+		if (errorCode) fatal("Failed to sent quit signal to thread %d, Error code: %d", i, errorCode);
+	}
+
+	for (int i = 0; i < 4; i++){
+		errorCode = pthread_join(threads[i], NULL);
+		if (errorCode) fatal("Error code from pthread_join: %d", errorCode);
+	}
 }
 
 stringstream Mom::

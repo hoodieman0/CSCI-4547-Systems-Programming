@@ -13,8 +13,7 @@ $(TARGET): $(BUILD) $(OBJ)
 
 # Delete executable and build folder
 clean:
-	rm -r $(BUILD)
-	rm $(TARGET)
+	rm -r $(BUILD) $(TARGET)
 
 # Make build directory
 build:
