@@ -58,8 +58,8 @@ run(){
 		errorCode = pthread_join(threads[i], NULL);
 		if (errorCode) fatal("Error code from pthread_join: %d", errorCode);
 	}
-
 	findComplete();
+
 	cout <<"Threads rejoined\n";
 	cout <<"Completed Jobs: " <<completedJobs.size() <<endl;
 	int kidMoney[4] = {0, 0, 0, 0};
