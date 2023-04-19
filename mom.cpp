@@ -2,14 +2,14 @@
 
 void Mom::
 findComplete(){
-	pthread_mutex_lock(&jobsTable.mtx);
+	//pthread_mutex_lock(&jobsTable.mtx);
 	for (int i = 0; i < 10; i++){
 		if (jobsTable.jobs[i].getStatus() == complete){
 			completedJobs.push_back(jobsTable.jobs[i]);
 			jobsTable.jobs[i] = Job();
 		}
 	}
-	pthread_mutex_unlock(&jobsTable.mtx);
+	//pthread_mutex_unlock(&jobsTable.mtx);
 }
 
 void Mom::
@@ -32,7 +32,7 @@ run(){
 
 	startTime = time(NULL);
 
-	sleep(1);
+	sleep(.5);
 	for (int i = 0; i < 4; i++){
 		errorCode = pthread_kill(threads[i], SIGUSR1);
 		if (errorCode) fatal("Failed to sent start signal to thread %d, Error code: %d", i, errorCode);
@@ -45,7 +45,9 @@ run(){
 		curTime = time(NULL);
 		if (curTime - startTime >= 21) break;
 
+		pthread_mutex_lock(&jobsTable.mtx);
 		findComplete();
+		pthread_mutex_unlock(&jobsTable.mtx);
 	}
 
 	for (int i = 0; i < 4; i++){
@@ -87,7 +89,7 @@ print() const{
 
 	ss <<"Kids:\n";
 	for (int i = 0; i < 4; i++){
-		ss <<kids[i] <<"Thread id: " <<threads[i] <<endl;
+		ss <<kids[i] <<endl;
 	}
 
 	return ss;

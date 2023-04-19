@@ -22,13 +22,17 @@ run(){
 	if (signo == SIGUSR1){
 		cout <<"SIGUSR1 received\n";
 		for (;;){
+			pthread_mutex_lock(&jobs->mtx);
 			curJob = pickJob();
+			pthread_mutex_unlock(&jobs->mtx);
 			cout <<"Job picked\n";
 			sleep(curJob->getTime());
 			if (quitflag) break;
 			else{
+				pthread_mutex_lock(&jobs->mtx);
 				curJob->announceDone();
 				completedJobs.push_back(*curJob);
+				pthread_mutex_unlock(&jobs->mtx);
 				cout <<"Job finished, Job status: " <<curJob->getStatus() <<endl;
 			}
 		}
@@ -42,7 +46,7 @@ run(){
 	output <<"Quit receieved\n";
 	output <<name <<" completed jobs: \n";
 	for (long unsigned i = 0; i < completedJobs.size(); i++){
-		output <<"Job " <<i + 1 <<", Value: " <<setw(3) <<completedJobs[i].getValue() <<"\t" <<completedJobs[i].getStatus() <<endl;
+		output <<"Job " <<completedJobs[i].id <<", Value: " <<setw(3) <<completedJobs[i].getValue() <<"\t" <<completedJobs[i].getStatus() <<endl;
 	}
 	output <<"Total money earned: " <<moneyEarned <<endl;
 	cout <<output.str();
@@ -69,7 +73,6 @@ lazyJob(){
 	int jobIndex;
 	short compare, difficulty = 6;
 
-	pthread_mutex_lock(&jobs->mtx);
 	for (int i = 0; i < 10; i++){
 		compare = jobs->jobs[i].getDifficulty();
 		if (jobs->jobs[i].getStatus() == notStarted && compare < difficulty){
@@ -79,7 +82,6 @@ lazyJob(){
 	}
 
 	jobs->jobs[jobIndex].chooseJob(name, jobIndex);
-	pthread_mutex_unlock(&jobs->mtx);
 
 	return &jobs->jobs[jobIndex];
 }
@@ -89,7 +91,6 @@ shortJob(){
 	int jobIndex;
 	short compare, time = 6;
 
-	pthread_mutex_lock(&jobs->mtx);
 	for (int i = 0; i < 10; i++){
 		compare = jobs->jobs[i].getTime();
 		if (jobs->jobs[i].getStatus() == notStarted && compare < time){
@@ -99,7 +100,6 @@ shortJob(){
 	}
 
 	jobs->jobs[jobIndex].chooseJob(name, jobIndex);
-	pthread_mutex_unlock(&jobs->mtx);
 
 	return &jobs->jobs[jobIndex];
 }
@@ -109,7 +109,6 @@ cleanJob(){
 	int jobIndex;
 	short compare, dirtiness = 6;
 
-	pthread_mutex_lock(&jobs->mtx);
 	for (int i = 0; i < 10; i++){
 		compare = jobs->jobs[i].getDirtiness();
 		if (jobs->jobs[i].getStatus() == notStarted && compare < dirtiness){
@@ -119,7 +118,6 @@ cleanJob(){
 	}
 
 	jobs->jobs[jobIndex].chooseJob(name, jobIndex);
-	pthread_mutex_unlock(&jobs->mtx);
 
 	return &jobs->jobs[jobIndex];
 }
@@ -127,19 +125,17 @@ cleanJob(){
 Job* Kid::
 greedyJob(){
 	int jobIndex;
-	short compare, value = 6;
+	short compare, value = 0;
 
-	pthread_mutex_lock(&jobs->mtx);
 	for (int i = 0; i < 10; i++){
 		compare = jobs->jobs[i].getValue();
-		if (jobs->jobs[i].getStatus() == notStarted && compare < value){
+		if (jobs->jobs[i].getStatus() == notStarted && compare > value){
 			jobIndex = i;
 			value = compare;
 		}
 	}
 
 	jobs->jobs[jobIndex].chooseJob(name, jobIndex);
-	pthread_mutex_unlock(&jobs->mtx);
 
 	return &jobs->jobs[jobIndex];
 }
@@ -148,7 +144,6 @@ Job* Kid::
 anyJob(){
 	int jobIndex;
 
-	pthread_mutex_lock(&jobs->mtx);
 	for (int i = 0; i < 10; i++){
 		if (jobs->jobs[i].getStatus() == notStarted){
 			jobIndex = i;
@@ -157,7 +152,6 @@ anyJob(){
 	}
 
 	jobs->jobs[jobIndex].chooseJob(name, jobIndex);
-	pthread_mutex_unlock(&jobs->mtx);
 
 	return &jobs->jobs[jobIndex];
 }

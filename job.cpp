@@ -1,5 +1,7 @@
 #include "job.hpp"
 
+int Job::jobTotal = 0;
+
 Job::
 Job(){
 	time = rand() % 5 + 1;
@@ -7,6 +9,7 @@ Job(){
 	difficulty = rand() % 5 + 1;
 	value = time * (dirtiness + difficulty);
 	status = notStarted;
+	id = ++jobTotal;
 }
 
 void Job::

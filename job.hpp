@@ -5,6 +5,7 @@
 
 class Job{
 private:
+	static int jobTotal;
 	short time, dirtiness, difficulty;
 	int value;
 	string kidName;
