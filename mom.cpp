@@ -2,14 +2,14 @@
 
 void Mom::
 findComplete(){
-	//pthread_mutex_lock(&jobsTable.mtx);
+	pthread_mutex_lock(&jobsTable.mtx);
 	for (int i = 0; i < 10; i++){
 		if (jobsTable.jobs[i].getStatus() == complete){
 			completedJobs.push_back(jobsTable.jobs[i]);
 			jobsTable.jobs[i] = Job();
 		}
 	}
-	//pthread_mutex_unlock(&jobsTable.mtx);
+	pthread_mutex_unlock(&jobsTable.mtx);
 }
 
 void Mom::
@@ -45,9 +45,7 @@ run(){
 		curTime = time(NULL);
 		if (curTime - startTime >= 21) break;
 
-		pthread_mutex_lock(&jobsTable.mtx);
 		findComplete();
-		pthread_mutex_unlock(&jobsTable.mtx);
 	}
 
 	for (int i = 0; i < 4; i++){
@@ -60,6 +58,8 @@ run(){
 		errorCode = pthread_join(threads[i], NULL);
 		if (errorCode) fatal("Error code from pthread_join: %d", errorCode);
 	}
+
+	findComplete();
 	cout <<"Threads rejoined\n";
 	cout <<"Completed Jobs: " <<completedJobs.size() <<endl;
 	int kidMoney[4] = {0, 0, 0, 0};
