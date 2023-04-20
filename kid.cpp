@@ -47,7 +47,7 @@ run(){
 	output <<"Quit receieved\n";
 	output <<name <<" completed jobs: \n";
 	for (long unsigned i = 0; i < completedJobs.size(); i++){
-		output <<"Job " <<completedJobs[i].id <<", Value: " <<setw(3) <<completedJobs[i].getValue() <<"\t" <<completedJobs[i].getStatus() <<endl;
+		output <<"Job " <<completedJobs[i].id <<", Value: " <<setw(3) <<completedJobs[i].getValue() <<endl;
 	}
 	output <<"Total money earned: " <<moneyEarned <<endl;
 	cout <<output.str();
