@@ -13,7 +13,7 @@ Job(){
 }
 
 void Job::
-chooseJob(string name, int jobNumber){
+chooseJob(string name, int jobNumber){ 
 	kidName = name;
 	status = working;
 }

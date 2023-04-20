@@ -26,6 +26,7 @@ run(){
 			curJob = pickJob();
 			pthread_mutex_unlock(&jobs->mtx);
 			cout <<"Job picked\n";
+			
 			sleep(curJob->getTime());
 			if (quitflag) break;
 			else{
@@ -65,6 +66,8 @@ pickJob(){
 			return greedyJob();
 		case cooperative:
 			return anyJob();
+		default:
+			return nullptr;
 	}
 }
 

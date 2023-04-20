@@ -1,0 +1,121 @@
+Threads created
+Start signals sent
+SIGUSR1 received
+Job picked
+SIGUSR1 received
+Job picked
+SIGUSR1 received
+Job picked
+SIGUSR1 received
+Job picked
+Job finished, Job status: 2
+Job finished, Job status: 2
+Job picked
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Quit signals sent
+Quit receieved
+Kid 1 completed jobs: 
+Job 17, Value:  45	2
+Job 18, Value:  28	2
+Job 28, Value:  28	2
+Job 32, Value:  40	2
+Total money earned: 141
+Quit receieved
+Kid 2 completed jobs: 
+Job 16, Value:   3	2
+Job 15, Value:  12	2
+Job 22, Value:   4	2
+Job 24, Value:  25	2
+Job 29, Value:  12	2
+Job 34, Value:  21	2
+Job 39, Value:   6	2
+Job 42, Value:  10	2
+Total money earned: 93
+Quit receieved
+Kid 3 completed jobs: 
+Job 11, Value:   8	2
+Job 12, Value:  21	2
+Job 25, Value:  45	2
+Job 31, Value:  15	2
+Job 38, Value:   7	2
+Job 40, Value:  30	2
+Total money earned: 126
+Quit receieved
+Kid 4 completed jobs: 
+Job 14, Value:   5	2
+Job 20, Value:   7	2
+Job 21, Value:   8	2
+Job 13, Value:  30	2
+Job 27, Value:   6	2
+Job 26, Value:  20	2
+Job 33, Value:  16	2
+Job 35, Value:   5	2
+Job 30, Value:  15	2
+Job 23, Value:  21	2
+Job 36, Value:  15	2
+Total money earned: 148
+Threads rejoined
+Completed Jobs: 29
+Kid 1 Money: 141
+Kid 2 Money: 93
+Kid 3 Money: 126
+Kid 4 Money: 148
+Kids:
+Kid Name: Kid 1	Mood:      Greedy Num jobs: 4 
+Kid Name: Kid 2	Mood:      Prissy Num jobs: 8 
+Kid Name: Kid 3	Mood: Cooperative Num jobs: 6 
+Kid Name: Kid 4	Mood:   Overtired Num jobs: 11 
