@@ -21,7 +21,6 @@ run(){
 	// Create kids and add to kid array
 	for (int k = 0; k < 4; k++){
 		kids[k] = Kid(kidNames[k], &jobsTable);
-		kids[k].chooseMood();
 	}
 
 	for (int i = 0; i < 4; i++){
