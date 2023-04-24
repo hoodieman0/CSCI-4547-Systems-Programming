@@ -5,6 +5,7 @@ Kid(string kidName, JobTable* table) : name(kidName), jobs(table){}
 
 void Kid::
 run(){
+	stringstream output;
 	Job* curJob;
 	int signo;
 	sigset_t signals;
@@ -25,7 +26,6 @@ run(){
 			pthread_mutex_lock(&jobs->mtx);
 			curJob = pickJob();
 			pthread_mutex_unlock(&jobs->mtx);
-			cout <<"Job picked\n";
 			
 			sleep(curJob->getTime());
 			if (quitflag) break;
@@ -34,17 +34,16 @@ run(){
 				curJob->announceDone();
 				completedJobs.push_back(*curJob);
 				pthread_mutex_unlock(&jobs->mtx);
-				cout <<"Job finished, Job status: " <<curJob->getStatus() <<endl;
 			}
 		}
 	}
+	output <<"Quit signal received\n";
 
 	int moneyEarned = 0;
-	stringstream output;
 	for (Job j : completedJobs){
 		moneyEarned += j.getValue();
 	}
-	output <<"Quit receieved\n";
+
 	output <<name <<" completed jobs: \n";
 	for (long unsigned i = 0; i < completedJobs.size(); i++){
 		output <<"Job " <<completedJobs[i].id <<", Value: " <<setw(3) <<completedJobs[i].getValue() <<endl;

@@ -16,6 +16,7 @@ void Mom::
 run(){
 	int errorCode;
 
+	banner();
 	initializeJobs();
 	
 	// Create kids and add to kid array
