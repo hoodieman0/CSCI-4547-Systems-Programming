@@ -1,8 +1,7 @@
-#include <vector>
-#include "jobTable.hpp"
-#include "kid.hpp"
-
 #pragma once
+
+#include <vector>
+#include "kid.hpp"
 
 class Mom{
 private:

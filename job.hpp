@@ -1,7 +1,7 @@
+#pragma once
+
 #include "tools.hpp"
 #include "enums.hpp"
-
-#pragma once
 
 class Job{
 private:
@@ -15,10 +15,10 @@ public:
 	Job();
 	void chooseJob(string name, int jobNumber);
 	void announceDone();
-	inline const jobStat getStatus(){ return status; };
-	inline const short getTime(){ return time; };
-	inline const short getDirtiness(){ return dirtiness; };
-	inline const short getDifficulty(){ return difficulty; };
-	inline const int getValue(){ return value; };
-	inline const string getName(){ return kidName; };
+	inline jobStat getStatus() const { return status; };
+	inline short getTime() const { return time; };
+	inline short getDirtiness() const { return dirtiness; };
+	inline short getDifficulty() const { return difficulty; };
+	inline int getValue() const { return value; };
+	inline string getName() const { return kidName; };
 };

@@ -1,7 +1,7 @@
+#pragma once
+
 #include <pthread.h>
 #include "job.hpp"
-
-#pragma once
 
 static bool quitflag = false;
 

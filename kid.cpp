@@ -36,20 +36,20 @@ run(){
 				pthread_mutex_unlock(&jobs->mtx);
 			}
 		}
-	}
-	output <<"Quit signal received\n";
+		output <<"Quit signal received\n";
 
-	int moneyEarned = 0;
-	for (Job j : completedJobs){
-		moneyEarned += j.getValue();
-	}
+		int moneyEarned = 0;
+		for (Job j : completedJobs){
+			moneyEarned += j.getValue();
+		}
 
-	output <<name <<" completed jobs: \n";
-	for (long unsigned i = 0; i < completedJobs.size(); i++){
-		output <<"Job " <<completedJobs[i].id <<", Value: " <<setw(3) <<completedJobs[i].getValue() <<endl;
+		output <<name <<" completed jobs: \n";
+		for (long unsigned i = 0; i < completedJobs.size(); i++){
+			output <<"Job " <<completedJobs[i].id <<", Value: " <<setw(3) <<completedJobs[i].getValue() <<endl;
+		}
+		output <<"Total money earned: " <<moneyEarned <<endl;
+		cout <<output.str();
 	}
-	output <<"Total money earned: " <<moneyEarned <<endl;
-	cout <<output.str();
 }
 
 Job* Kid::

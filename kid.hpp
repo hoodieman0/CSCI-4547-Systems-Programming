@@ -1,8 +1,8 @@
+#pragma once
+
 #include <vector>
 #include <signal.h>
 #include "jobTable.hpp"
-
-#pragma once
 
 class Kid{
 private:
@@ -27,4 +27,3 @@ public:
 };
 
 inline ostream& operator<<(ostream& out, const Kid& k) { return out <<k.print().str(); }
-
