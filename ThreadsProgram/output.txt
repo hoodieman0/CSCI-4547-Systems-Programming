@@ -1,0 +1,112 @@
+Threads created
+SIGUSR1 received
+Job picked
+SIGUSR1 received
+Job picked
+Start signals sent
+SIGUSR1 received
+Job picked
+SIGUSR1 received
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Job finished, Job status: 2
+Job picked
+Quit signals sent
+Quit receieved
+Kid 1 completed jobs: 
+Job 13, Value:  20
+Job 24, Value:   6
+Job 29, Value:  15
+Job 31, Value:  12
+Job 34, Value:   6
+Job 36, Value:  20
+Total money earned: 79
+Quit receieved
+Kid 2 completed jobs: 
+Job 11, Value:  15
+Job 23, Value:  18
+Job 26, Value:  32
+Job 30, Value:  15
+Job 33, Value:  30
+Job 40, Value:  10
+Total money earned: 120
+Quit receieved
+Kid 3 completed jobs: 
+Job 20, Value:   2
+Job 17, Value:  24
+Job 25, Value:  15
+Job 27, Value:  20
+Job 32, Value:  12
+Job 39, Value:   4
+Total money earned: 77
+Quit receieved
+Kid 4 completed jobs: 
+Job 12, Value:   8
+Job 22, Value:  18
+Job 14, Value:   8
+Job 15, Value:  27
+Job 28, Value:  40
+Job 16, Value:  12
+Job 35, Value:  16
+Job 37, Value:  14
+Total money earned: 143
+Threads rejoined
+Completed Jobs: 26
+Kid 1 Money: 79
+Kid 2 Money: 120
+Kid 3 Money: 77
+Kid 4 Money: 143
+Kids:
+Kid Name: Kid 1	Mood:        Lazy Num jobs: 6 
+Kid Name: Kid 2	Mood: Cooperative Num jobs: 6 
+Kid Name: Kid 3	Mood:        Lazy Num jobs: 6 
+Kid Name: Kid 4	Mood: Cooperative Num jobs: 8 
