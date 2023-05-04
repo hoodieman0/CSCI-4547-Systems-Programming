@@ -10,22 +10,22 @@ Socket(){
 // Update struct (info) with the current information
 void Socket::
 refresh(){
-    socklen_t addrlen = sizeof(struct sockaddr_in);
+    socklen_t addrlen = sizeof(sockInfo);
     int status = getsockname(fd, (sockaddr*)&info, &addrlen);
     if ( status < 0 ) fatalp("Socket: getsockname failed on socket %d.", fd);
-    this->print(cout); //TODO overload operator
+    cout << *this;
 }
 
 // returns peer of connected socket
 int Socket::
 peer(Socket* pr) const {
     socklen_t addrlen = sizeof(sockaddr_in);
-    sockaddr_in peeraddr; // Send to getpeername as an output parameter.
+    sockInfo peeraddr; // Send to getpeername as an output parameter.
     int status = getpeername(fd, (sockaddr*)&peeraddr, &addrlen);
-    if (addrlen != sizeof(sockaddr_in))
-        fatal("Buffer length error %d!=%d\n", addrlen, sizeof(sockaddr_in));
+    if (addrlen != sizeof(sockInfo))
+        fatal("Buffer length error %d!=%d\n", addrlen, sizeof(sockInfo));
 
-    *(sockaddr_in*)pr = peeraddr;
+    *(sockInfo*)pr = peeraddr;
     return status;
 }
 
@@ -40,7 +40,7 @@ listen(int port) {
     int status = ::bind(fd, (sockaddr*)&info, sizeof(struct sockaddr_in));
     if (status < 0) fatalp("Can't bind socket (%d)", fd);
     refresh();
-    cout << "Just bound socket " << fd << ": "; this->print(cout); cout << endl; //TODO operator overload
+    cout << "Just bound socket " << fd << ": " << *this << endl;
 
     // Declare that this is the welcome socket and it listens for clients.
     status = ::listen(fd, 1);

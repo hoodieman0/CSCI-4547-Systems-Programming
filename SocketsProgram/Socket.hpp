@@ -8,10 +8,12 @@
 
 #include "tools.hpp"
 
+typedef struct sockaddr_in  sockInfo;
+
 class Socket {
 private:
     int fd = -1;
-    sockaddr_in info = {0};
+    sockInfo info = {0};
 
 public:
     Socket();
@@ -27,5 +29,9 @@ public:
 
     ostream& print(ostream& out) const;
 };
+
+inline ostream& operator <<(ostream& out, const Socket& sn) {
+	return sn.print(out); 
+    }
 
 #endif
