@@ -77,23 +77,6 @@ connect(const char* host, int port) {
 	if (status < 0) fatalp("Client: Connection to %s refused.", host);
 	refresh();
 	cout << "Socket: connection established to " << host << ".\n";
-
-    char buf[BUFSIZ+1];
-    // wait for server to acknowledge the connection. 
-    int nBytes = read( fd, buf, sizeof buf );
-    if( nBytes >= 0 )  cout <<nBytes <<"  " <<buf;	// the connection message.
-    else fatal("%s: Error while reading from socket.", process );
-    
-    // Write lines until message is complete.
-    // Number of lines to write from defined poem
-    char* line = "We Are Here!";
-    for( int k = 0; k < 5; k++ ) {
-        sleep(1);
-        nBytes = write( fd, line, strlen(line) );
-		cout <<"@";
-        if( nBytes < 0 ) fatal("%s: Error while writing to socket.", process);
-    }
-    cout <<endl;
 }
 
 ostream&
