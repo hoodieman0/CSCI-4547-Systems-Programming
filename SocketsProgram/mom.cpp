@@ -1,9 +1,8 @@
 #include "mom.hpp"
 
 Mom::
-Mom(char* process, int port) : process(process), port(port), server(Socket(process)) {
+Mom(char* process, int port) : table(JobTable()), process(process), port(port), server(Socket(process)) {
     banner();
-    table = JobTable();
 }
 
 void Mom::
@@ -47,19 +46,27 @@ startPolling(){
 		}
 		// =====================================================================
 		// Scan the working sockets and process whatever tasks you find
-		int k;
+		if (currentClients >= 1){
+		short k;
 		for (k = 0; k < currentClients; k++) {
+			
 			if (worker[k].revents != 0) {
-				status = doService( &worker[k] );
+				status = doService( &worker[k], k+1 );
 				if ( status == -1){		// Remove dead socket from polling table
+					status = sockStat::QUIT;
+					int bytes = write(worker[k].fd, &status, sizeof(status) );
+					if (bytes < 1) { fatalp("Failed to write to socket"); }
 					worker[k] = worker[--currentClients];		// decrement # of workers
 				}
 			}
 		}
+	}
 		// stop looking for new clients if max has been reached ----------------
 		welcome->events = (currentClients < MAXCLIENTS) ? POLLIN : 0;
 	}	// end polling loop
 }
+
+
 
 int Mom::
 doWelcome(int welcomeSock, int* nClip, toPoll* worker, const char* greeting){
@@ -72,35 +79,34 @@ doWelcome(int welcomeSock, int* nClip, toPoll* worker, const char* greeting){
 		cout <<"False alarm: packet was rejected.\n";
 		return 0;  // False alarm, nobody there, 0 new clients.
 	}
-	
+
 	printsockaddr_in("working--from newCaller", newCaller);  // same as getpeername
-	// --------------------------- Put new socket into our polling list.
-	worker[nCli].fd = newfd;
-	worker[nCli].events = POLLIN;
-	worker[nCli].revents = 0;
-	
 	// ----------------------------- We have a new caller -- send an ack.
 	//int bytes = write(newfd, greeting, strlen(greeting)); TODO
 	int buf[2];
 	buf[0] = sockStat::ACK;
-	buf[1] = 9;
+	buf[1] = nCli+1;
 	int bytes = write(newfd, &buf, sizeof(buf)); // write the ACK
 	if (bytes < 1) say("Error while writing to socket");
 
 	int nBytes = read( newfd, buf, sizeof buf );
-
-    // Kid kid();
-    if( nBytes >= 0 )  cout <<nBytes <<"  " <<buf[0] << endl; 
-	if ((sockStat)buf[0] == sockStat::ACK) cout << "Client Has Sent ACK" << endl;
-	else if ((sockStat)buf[0] == sockStat::NACK) cout << "Client Has Sent NACK" << endl;
-
+	if (nBytes > 0){
+		if ((sockStat)buf[0] == sockStat::ACK) cout << "Client Has Sent ACK" << endl;
+		else { cout << "Client Has Not Sent ACK" << endl; return 0; }
+	}
+	
+	
+	// --------------------------- Put new socket into our polling list.
+	worker[nCli].fd = newfd;
+	worker[nCli].events = POLLIN | POLLOUT;
+	worker[nCli].revents = 0;
 	
 	*nClip = nCli;		// Return the possibly-modified index of last client.
 	return 1;
 }
 
 int Mom::
-doService(toPoll* p){
+doService(toPoll* p, short id){
 	char buf[BUFSIZ + 1];
 	int retval = 0;		// Change in number of workers.
 	
@@ -126,7 +132,64 @@ doService(toPoll* p){
 			} else {
 				fatalp("Error %d from read, port %d", bytes, getPort(p->fd));
 			}
-		} 
+		}
+		else if (p->revents & POLLOUT){
+			cout << "I Have Reached POLLOUT" << endl;
+
+			int ACK = sockStat::ACK;
+			int bytes = write(p->fd, &ACK, sizeof(ACK) );
+			//if (bytes < 1) { cout << "Failed to write to socket" << endl; }
+
+				bytes = write(p->fd, &table, sizeof(table) );
+				if (bytes < 1) { cout << "Failed to write to socket" << endl; }
+				
+				Job chosenJob;
+				bytes = read(p->fd, &chosenJob, sizeof (chosenJob));
+				if (bytes < 0) { cout << "Could not read socket on " << p->fd << endl; return -1; }
+				cout << p->fd << " picked " << chosenJob.getID() <<" with Value : " << chosenJob.getValue() << endl;
+				for(Job job : table.jobs){
+					if (chosenJob.getID() == job.getID()){
+						if (job.getKid() == -1){
+							job.chooseJob(id); 
+							cout << job << endl;
+							ACK = sockStat::ACK;
+							int bytes = write(p->fd, &ACK, sizeof(ACK) );
+							if (bytes < 1) { cout << "Failed to write to socket" << endl; }
+							break;
+							}
+						else {
+							cout << "Job cannot be picked, sending back" << endl;
+							ACK = sockStat::NACK;
+							bytes = write(p->fd, &ACK, sizeof(ACK) );
+							if (bytes < 1) { cout << "Failed to write to socket" << endl; }
+							break;
+						}
+					}
+				}
+				cout << "exited loop" << endl;
+				
+				
+			
+
+			
+			
+
+			// Job temp;
+			// Job temp2;
+			// cout << temp.getID() <<" Time : " << temp.getTime() << endl;
+			// cout << temp2.getID() <<" Time : " << temp2.getTime() << endl;
+			// buffer[0] = sockStat::ACK;
+			// int bytes = write(p->fd, buffer, sizeof(buffer) );
+			// if (bytes < 1) { cout << "Failed to write to socket" << endl; }
+
+			
+			// bytes = write(p->fd, &temp, sizeof(temp) );
+			// if (bytes < 1) { cout << "Failed to write to socket" << endl; }
+			// bytes = write(p->fd, &temp2, sizeof(temp2) );
+			// if (bytes < 1) { cout << "Failed to write to socket" << endl; }
+			retval = 0;
+			
+		}
 		// ---------------------------- It wasn't a message, so test for hangup.
 		else if (p->revents & POLLHUP) {  // Caller hung up.
 			say("Removing dead socket %d\n", getPort(p->fd));

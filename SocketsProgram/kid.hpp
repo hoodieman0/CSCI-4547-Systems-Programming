@@ -20,7 +20,10 @@ private:
 public:
 	Kid() = default;
 	Kid(int kidID);
+	int getID() const { return name; }
+	mood getMood() const { return kidMood; }
 	void run();
+	void setTable(JobTable* table) { jobs = table;}
 	Job* pickJob();
 	stringstream print() const;
 	inline void chooseMood(){ kidMood = (mood)(rand() % 5); };

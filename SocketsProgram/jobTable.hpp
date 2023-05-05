@@ -12,6 +12,9 @@ class JobTable {
 		    jobs[i] = Job();
 	    }
     }
+    void chooseJob(short jobID, short kidID){
+
+    }
 };
 
 #endif

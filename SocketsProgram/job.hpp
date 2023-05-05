@@ -9,17 +9,17 @@ using namespace std;
 
 class Job {
     private:
-	static int jobTotal;
+	static short jobTotal;
     short id; 
 	short time, dirtiness, difficulty;
 	short value;
-	int kid;
+	short kid;
 	jobStat status;
 
     public: 
     Job();
     Job(int name);
-    void print();
+    ostream& print(ostream& out) const;
 
     // Setters
     void chooseJob(int kidID) { kid = kidID; status = working; }
@@ -30,7 +30,10 @@ class Job {
 	short getDirtiness() const { return dirtiness; };
 	short getDifficulty() const { return difficulty; };
 	int getValue() const { return value; };
-	int getID() const { return kid; };
+	short getID() const { return id; };
+    short getKid() const { return kid; }
 };
+
+inline ostream& operator<<(ostream& out, const Job& j) { return j.print(out); }
 
 #endif

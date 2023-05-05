@@ -6,6 +6,7 @@
 #include "tools.hpp"
 #include "enums.hpp"
 #include "JobTable.hpp"
+#include "job.hpp"
 #include "Socket.hpp"
 
 typedef pollfd toPoll;
@@ -31,7 +32,7 @@ public:
     void startServer();
     void startPolling();
     int doWelcome(int welcomeSock, int* nClip, toPoll* worker, const char* greeting);
-    int doService(toPoll* p);
+    int doService(toPoll* p, short id);
 
     int getPort(int fd);
     void printsockaddr_in(const char* who, sockaddr_in sock);

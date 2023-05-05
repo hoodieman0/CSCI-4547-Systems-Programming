@@ -7,7 +7,7 @@ CLIENTBUILD = ObjectFiles/Client
 # Server Object files
 SERVER = $(SERVERBUILD)/main.o $(SERVERBUILD)/job.o $(SERVERBUILD)/mom.o $(SERVERBUILD)/jobTable.o $(SERVERBUILD)/tools.o $(SERVERBUILD)/Socket.o
 # Client Object fies
-CLIENT = $(CLIENTBUILD)/client.o $(CLIENTBUILD)/kid.o $(CLIENTBUILD)/Socket.o $(CLIENTBUILD)/tools.o
+CLIENT = $(CLIENTBUILD)/client.o $(CLIENTBUILD)/kid.o $(CLIENTBUILD)/Socket.o $(CLIENTBUILD)/tools.o $(CLIENTBUILD)/job.o $(CLIENTBUILD)/jobTable.o
 # Compile target
 SERVERTARGET = serverMom
 PATTARGET = clientPat
@@ -65,3 +65,9 @@ $(CLIENTBUILD)/tools.o: tools.cpp tools.hpp
 
 $(CLIENTBUILD)/Socket.o: Socket.cpp Socket.hpp
 	c++ $(CXXFLAGS) -c Socket.cpp -o $(CLIENTBUILD)/Socket.o
+
+$(CLIENTBUILD)/job.o: job.cpp job.hpp
+	c++ $(CXXFLAGS) -c job.cpp -o $(CLIENTBUILD)/job.o
+
+$(CLIENTBUILD)/jobTable.o: jobTable.cpp jobTable.hpp
+	c++ $(CXXFLAGS) -c jobTable.cpp -o $(CLIENTBUILD)/jobTable.o
