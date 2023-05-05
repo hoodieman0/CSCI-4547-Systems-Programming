@@ -27,7 +27,7 @@ private:
     toPoll* const worker = &userFDs[1];
 
 public:
-    Mom(string process, int port);
+    Mom(char* process, int port);
     void startServer();
     void startPolling();
     int doWelcome(int welcomeSock, int* nClip, toPoll* worker, const char* greeting);

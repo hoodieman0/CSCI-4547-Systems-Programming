@@ -1,7 +1,7 @@
 #include "mom.hpp"
 
 Mom::
-Mom(string process, int port) : process(process), port(port) {
+Mom(char* process, int port) : process(process), port(port), server(Socket(process)) {
     banner();
     table = JobTable();
 }
@@ -126,7 +126,8 @@ doService(toPoll* p){
 	return retval;
 }
 
-void Mom::printsockaddr_in(const char* who, sockaddr_in sock) {
+void Mom::
+printsockaddr_in(const char* who, sockaddr_in sock) {
 	printf("%s socket is  {\n\t"
 		   "sin_family        = %d\n\t"
 		   "sin_addr.s_addr   = %s\n\t"
@@ -135,7 +136,8 @@ void Mom::printsockaddr_in(const char* who, sockaddr_in sock) {
 		   ntohs(sock.sin_port));
 }
 
-int Mom::getPort(int fd){
+int Mom::
+getPort(int fd){
 	sockaddr_in client;
 	socklen_t sockLen = sizeof client;
 	int status = getpeername(fd, (sockaddr*) &client, &sockLen);

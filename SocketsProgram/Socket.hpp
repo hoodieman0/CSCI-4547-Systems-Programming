@@ -14,9 +14,10 @@ class Socket {
 private:
     int fd = -1;
     sockInfo info = {0};
+    char* process;
 
 public:
-    Socket();
+    Socket(char* process);
     in_port_t port() const { return info.sin_port; }
     in_addr addr() const { return info.sin_addr; }
     int sockfd() const { return fd; }
