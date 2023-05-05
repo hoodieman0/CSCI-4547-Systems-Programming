@@ -45,7 +45,6 @@ startPolling(){
             }
             else fatalp("Error involving welcome mat: %d", welcome->revents);
 		}
-		
 		// =====================================================================
 		// Scan the working sockets and process whatever tasks you find
 		int k;

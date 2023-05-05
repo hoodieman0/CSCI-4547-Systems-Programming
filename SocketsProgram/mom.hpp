@@ -1,7 +1,7 @@
 #ifndef MOM_HPP
 #define MOM_HPP
 
-#define MAXCLIENTS 1
+#define MAXCLIENTS 10
 
 #include "tools.hpp"
 #include "enums.hpp"

@@ -86,8 +86,8 @@ connect(const char* host, int port) {
     
     // Write lines until message is complete.
     // Number of lines to write from defined poem
-    char* line = "We Are Here!\n";
-    for( int k = 0; k < 10; k++ ) {
+    char* line = "We Are Here!";
+    for( int k = 0; k < 5; k++ ) {
         sleep(1);
         nBytes = write( fd, line, strlen(line) );
 		cout <<"@";
