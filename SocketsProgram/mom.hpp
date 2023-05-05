@@ -15,12 +15,12 @@ class Mom {
 private:
     JobTable table;
 
-    char hostname[256]; // to store name of local host.
+    char hostname[242]; // to store name of local host.
     string process;
 
     //Socket things
-    Socket server;
     int port;
+    Socket server;
     int currentClients = 0;
     toPoll userFDs[MAXCLIENTS + 1];
     toPoll* const welcome = &userFDs[0];

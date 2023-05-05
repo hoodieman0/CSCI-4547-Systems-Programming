@@ -8,7 +8,7 @@ Mom(char* process, int port) : process(process), port(port), server(Socket(proce
 
 void Mom::
 startServer(){
-	gethostname(hostname, 256);			// get name of local host.
+	gethostname(hostname, 242);			// get name of local host.
 	cout <<"server is " << hostname <<endl;
 
     server.listen(port);
@@ -28,7 +28,7 @@ void Mom::
 startPolling(){
     int status = 0;
 
-	char greeting[256];
+	char greeting[284];
 	sprintf(greeting, "Connected to (%s.%d)\n", hostname, port);
 
     for (;;) {
