@@ -13,16 +13,16 @@ class Job {
     short id; 
 	short time, dirtiness, difficulty;
 	short value;
-	string kidName;
+	int kid;
 	jobStat status;
 
     public: 
     Job();
-    Job(string name);
+    Job(int name);
     void print();
 
     // Setters
-    void chooseJob(string name) { kidName = name; status = working; }
+    void chooseJob(int kidID) { kid = kidID; status = working; }
 
     // Getters
     jobStat getStatus() const { return status; };
@@ -30,7 +30,7 @@ class Job {
 	short getDirtiness() const { return dirtiness; };
 	short getDifficulty() const { return difficulty; };
 	int getValue() const { return value; };
-	string getName() const { return kidName; };
+	int getID() const { return kid; };
 };
 
 #endif

@@ -11,7 +11,7 @@ Job::Job(){
 	id = ++jobTotal;
 }
 
-Job::Job(string name){
+Job::Job(int name){
     jobTotal = 0;
     
     time = rand() % 5 + 1;
@@ -21,12 +21,12 @@ Job::Job(string name){
 	status = notStarted;
 	id = ++jobTotal;
 
-    kidName = name;
+    kid = name;
 }
 
 void Job::print(){
     cout << "Job ID: " << id << endl;
     cout << "Job " << id << " Value: " << value << endl;
-    cout << "Job " << id <<" Kid: " << kidName << endl;
+    cout << "Job " << id <<" Kid: " << kid << endl;
     cout << "Job " << id <<" Status: " << status << endl;
 }
