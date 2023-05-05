@@ -80,8 +80,20 @@ doWelcome(int welcomeSock, int* nClip, toPoll* worker, const char* greeting){
 	worker[nCli].revents = 0;
 	
 	// ----------------------------- We have a new caller -- send an ack.
-	int bytes = write(newfd, greeting, strlen(greeting));
+	//int bytes = write(newfd, greeting, strlen(greeting)); TODO
+	int buf[2];
+	buf[0] = sockStat::ACK;
+	buf[1] = 9;
+	int bytes = write(newfd, &buf, sizeof(buf)); // write the ACK
 	if (bytes < 1) say("Error while writing to socket");
+
+	int nBytes = read( newfd, buf, sizeof buf );
+
+    // Kid kid();
+    if( nBytes >= 0 )  cout <<nBytes <<"  " <<buf[0] << endl; 
+	if ((sockStat)buf[0] == sockStat::ACK) cout << "Client Has Sent ACK" << endl;
+	else if ((sockStat)buf[0] == sockStat::NACK) cout << "Client Has Sent NACK" << endl;
+
 	
 	*nClip = nCli;		// Return the possibly-modified index of last client.
 	return 1;
