@@ -2,41 +2,64 @@
 CXXFLAGS = -Wall -std=c++17
 # Build folder for .o files
 BUILD = ObjectFiles
-# Object files
-OBJ = $(BUILD)/main.o $(BUILD)/job.o $(BUILD)/mom.o $(BUILD)/kid.o $(BUILD)/jobTable.o $(BUILD)/tools.o $(BUILD)/Socket.o
+SERVERBUILD = ObjectFiles/Server
+CLIENTBUILD = ObjectFiles/Client
+# Server Object files
+SERVER = $(SERVERBUILD)/main.o $(SERVERBUILD)/job.o $(SERVERBUILD)/mom.o $(SERVERBUILD)/jobTable.o $(SERVERBUILD)/tools.o $(SERVERBUILD)/Socket.o
+# Client Object fies
+CLIENT = $(CLIENTBUILD)/kid.o $(CLIENTBUILD)/Socket.o $(CLIENTBUILD)/tools.o
 # Compile target
-TARGET = Sockets
+SERVERTARGET = serverMom
+PATTARGET = clientPat
+MARYTARGET = clientMary
+JOHNTARGET = clientJohn
+
+all: $(SERVERTARGET) clients
 
 # Link object files and produce executable
-$(TARGET): $(BUILD) $(OBJ)
-	c++ $(CXXFLAGS) $(OBJ) -o $(TARGET)
+$(SERVERTARGET): $(BUILD) $(SERVER)
+	c++ $(CXXFLAGS) $(SERVER) -o $(SERVERTARGET)
+
+clients: $(BUILD) $(CLIENT)
+	c++ $(CXXFLAGS) $(CLIENT) -o $(PATTARGET)
+	c++ $(CXXFLAGS) $(CLIENT) -o $(MARYTARGET)
+	c++ $(CXXFLAGS) $(CLIENT) -o $(JOHNTARGET)
 
 # Delete executable and build folder
 clean:
-	rm -r $(BUILD) $(TARGET) $(OBJ)
+	rm -r $(SERVERTARGET) $(PATTARGET) $(MARYTARGET) $(JOHNTARGET) $(SERVER) $(CLIENT) $(BUILD) 
 
 # Make build directory
 $(BUILD):
-	mkdir -p $(BUILD)
+#	 mkdir -p $(BUILD)
+	mkdir -p $(SERVERBUILD) && mkdir -p $(CLIENTBUILD)
 
 # Dependencies
-$(BUILD)/main.o: main.cpp mom.hpp kid.hpp job.hpp jobTable.hpp tools.hpp Socket.hpp
-	c++ $(CXXFLAGS) -c main.cpp -o $(BUILD)/main.o
+$(SERVERBUILD)/main.o: main.cpp mom.hpp job.hpp jobTable.hpp tools.hpp Socket.hpp
+	c++ $(CXXFLAGS) -c main.cpp -o $(SERVERBUILD)/main.o
 
-$(BUILD)/job.o: job.cpp job.hpp
-	c++ $(CXXFLAGS) -c job.cpp -o $(BUILD)/job.o
+$(SERVERBUILD)/job.o: job.cpp job.hpp
+	c++ $(CXXFLAGS) -c job.cpp -o $(SERVERBUILD)/job.o
 
-$(BUILD)/mom.o: mom.cpp mom.hpp
-	c++ $(CXXFLAGS) -c mom.cpp -o $(BUILD)/mom.o
+$(SERVERBUILD)/mom.o: mom.cpp mom.hpp
+	c++ $(CXXFLAGS) -c mom.cpp -o $(SERVERBUILD)/mom.o
 
-$(BUILD)/kid.o: kid.cpp kid.hpp
-	c++ $(CXXFLAGS) -c kid.cpp -o $(BUILD)/kid.o
+$(SERVERBUILD)/jobTable.o: jobTable.hpp jobTable.cpp
+	c++ $(CXXFLAGS) -c jobTable.cpp -o $(SERVERBUILD)/jobTable.o
 
-$(BUILD)/jobTable.o: jobTable.hpp jobTable.cpp
-	c++ $(CXXFLAGS) -c jobTable.cpp -o $(BUILD)/jobTable.o
+$(SERVERBUILD)/tools.o: tools.cpp tools.hpp
+	c++ $(CXXFLAGS) -c tools.cpp -o $(SERVERBUILD)/tools.o
 
-$(BUILD)/tools.o: tools.cpp tools.hpp
-	c++ $(CXXFLAGS) -c tools.cpp -o $(BUILD)/tools.o
+$(SERVERBUILD)/Socket.o: Socket.cpp Socket.hpp
+	c++ $(CXXFLAGS) -c Socket.cpp -o $(SERVERBUILD)/Socket.o
 
-$(BUILD)/Socket.o: Socket.cpp Socket.hpp
-	c++ $(CXXFLAGS) -c Socket.cpp -o $(BUILD)/Socket.o
+
+
+$(CLIENTBUILD)/kid.o: kid.cpp Socket.hpp
+	c++ $(CXXFLAGS) -c kid.cpp -o $(CLIENTBUILD)/kid.o
+
+$(CLIENTBUILD)/tools.o: tools.cpp tools.hpp
+	c++ $(CXXFLAGS) -c tools.cpp -o $(CLIENTBUILD)/tools.o
+
+$(CLIENTBUILD)/Socket.o: Socket.cpp Socket.hpp
+	c++ $(CXXFLAGS) -c Socket.cpp -o $(CLIENTBUILD)/Socket.o
