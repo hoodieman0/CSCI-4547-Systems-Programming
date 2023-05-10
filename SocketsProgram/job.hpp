@@ -22,7 +22,7 @@ class Job {
     ostream& print(ostream& out) const;
 
     // Setters
-    void chooseJob(int kidID) { kid = kidID; status = working; }
+    void chooseJob(short kidID) { kid = kidID; status = working; }
 
     // Getters
     jobStat getStatus() const { return status; };

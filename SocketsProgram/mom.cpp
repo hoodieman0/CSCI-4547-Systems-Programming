@@ -58,6 +58,11 @@ startPolling(){
 					if (bytes < 1) { fatalp("Failed to write to socket"); }
 					worker[k] = worker[--currentClients];		// decrement # of workers
 				}
+				else {
+					status = sockStat::ACK;
+					int bytes = write(worker[k].fd, &status, sizeof(status) );
+					if (bytes < 1) { fatalp("Failed to write to socket"); }
+				}
 			}
 		}
 	}
@@ -134,7 +139,15 @@ doService(toPoll* p, short id){
 			}
 		}
 		else if (p->revents & POLLOUT){
-			cout << "I Have Reached POLLOUT" << endl;
+			// probably need a quitFlag
+				/*
+					Currently:
+					sends an ACK
+					sends the job table
+					reads in a job
+					if valid job: send ACK
+					if not valid: send NACK
+				*/
 
 			int ACK = sockStat::ACK;
 			int bytes = write(p->fd, &ACK, sizeof(ACK) );
@@ -147,11 +160,14 @@ doService(toPoll* p, short id){
 				bytes = read(p->fd, &chosenJob, sizeof (chosenJob));
 				if (bytes < 0) { cout << "Could not read socket on " << p->fd << endl; return -1; }
 				cout << p->fd << " picked " << chosenJob.getID() <<" with Value : " << chosenJob.getValue() << endl;
-				for(Job job : table.jobs){
-					if (chosenJob.getID() == job.getID()){
-						if (job.getKid() == -1){
-							job.chooseJob(id); 
-							cout << job << endl;
+				for(int i = 0; i<10;i++) {//job : table.jobs){
+					if (chosenJob.getID() == table.jobs[i].getID()){
+						if (table.jobs[i].getKid() == -1 && table.jobs[i].getStatus() == jobStat::notStarted){
+							cout << "Choosing Job " << table.jobs[i].getID() << "\n" << endl;
+							cout << table.jobs[i] << endl;
+							cout << "------------------------" << endl;
+							table.jobs[i].chooseJob(id); 
+							cout << table.jobs[i] << endl;
 							ACK = sockStat::ACK;
 							int bytes = write(p->fd, &ACK, sizeof(ACK) );
 							if (bytes < 1) { cout << "Failed to write to socket" << endl; }
@@ -166,27 +182,11 @@ doService(toPoll* p, short id){
 						}
 					}
 				}
-				cout << "exited loop" << endl;
+				for (int i =0; i < 10; i++) {
+					cout << table.jobs[i].getID() << " _ " << table.jobs[i].getKid() << " | ";
+				}
+				cout << endl;
 				
-				
-			
-
-			
-			
-
-			// Job temp;
-			// Job temp2;
-			// cout << temp.getID() <<" Time : " << temp.getTime() << endl;
-			// cout << temp2.getID() <<" Time : " << temp2.getTime() << endl;
-			// buffer[0] = sockStat::ACK;
-			// int bytes = write(p->fd, buffer, sizeof(buffer) );
-			// if (bytes < 1) { cout << "Failed to write to socket" << endl; }
-
-			
-			// bytes = write(p->fd, &temp, sizeof(temp) );
-			// if (bytes < 1) { cout << "Failed to write to socket" << endl; }
-			// bytes = write(p->fd, &temp2, sizeof(temp2) );
-			// if (bytes < 1) { cout << "Failed to write to socket" << endl; }
 			retval = 0;
 			
 		}

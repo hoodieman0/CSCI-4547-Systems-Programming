@@ -34,54 +34,49 @@ int main(int argc, char* argv[]){
     if( nBytes < 0 ) fatal("%s: Error while writing to socket.", process);
 
     sockStat status;
-    
+
+    JobTable table;
+    Job* picked;
+
     do {
-        // nBytes = read( client.sockfd(), &status, sizeof status );
-        
-        
-        JobTable table;
-        Job* picked;
-        do {
-            nBytes = read( client.sockfd(), &status, sizeof status );
-            cout << "\nFetching jobs" << endl;
-            nBytes = read( client.sockfd(), &table, sizeof (table) );
-            if (nBytes < 0) { cout << "Could not read welcome socket" << endl;}
-            cout << process << " Acknowledgement: Has received Job Table" << endl;
+    do{
+        nBytes = read( client.sockfd(), &status, sizeof status ); // reads in the firstACK
 
-            for(Job job : table.jobs){
-                cout << job << endl;
-            }
+        // reads in the job table from socket
+        cout << "\nFetching jobs" << endl;
+        nBytes = read( client.sockfd(), &table, sizeof (table) ); 
+        if (nBytes < 0) { cout << "Could not read welcome socket" << endl;}
+        cout << process << " Acknowledgement: Has received Job Table" << endl;
 
-            kid.setTable(&table);
-            picked = kid.pickJob();
-            if (picked == nullptr) { cout << "No jobs left to do!" << endl; break; }
-            cout << "Test" << endl;
+        // chooses a job from the table
+        kid.setTable(&table);
+        cout << "Here1" << endl;
+        picked = kid.pickJob();
+        cout << "Here2" << endl;
+        if (picked == nullptr) { cout << "No jobs left to do!" << endl; break;} 
+        cout << "Here0" << endl;
 
-            cout << process << " picked " << picked->getID() <<" with Value : " << picked->getValue() << endl;
-            nBytes = write( client.sockfd(), &*picked, sizeof(*picked) );
-            
-            // check if we can pick the job
-            // nBytes = read( client.sockfd(), &status, sizeof status );
-            nBytes = read( client.sockfd(), &status, sizeof status );
-            if (status == sockStat::NACK) { cout << "Server has denied request" << endl; }
-        } while(status == sockStat::NACK);
+        // send picked job over the socket
+        cout << process << " picked " << picked->getID() <<" with Value : " << picked->getValue() << endl;
+        nBytes = write( client.sockfd(), picked, sizeof(*picked) ); 
 
+        // read in the ACK, if ACK break, if NACK repeat
+        nBytes = read( client.sockfd(), &status, sizeof status );
+        for (int i =0; i < 10; i++) {
+					cout << table.jobs[i].getID() << " _ " << table.jobs[i].getKid() << " | ";
+				}
+				cout << endl;
+        if (status == sockStat::NACK) { cout << "Server has denied request" << endl; }
+    } while(status == sockStat::NACK);
 
-        
-
-        if (status == sockStat::ACK){
+    if (status == sockStat::ACK){
             cout << process << " is doing their chore!" << endl;
             sleep(picked->getTime());
             cout << process << " finished its chore.\n" << endl;
-
-
-            // cout << temp.getID() <<" Time : " << temp.getTime() << endl;
-            // sleep(temp.getTime());
-
-            // nBytes = read( client.sockfd(), &temp, sizeof (Job) );
-            // cout << nBytes << endl;
-            // cout << temp.getID() <<" Time : " << temp.getTime() << endl;
         }
+
+    nBytes = read( client.sockfd(), &status, sizeof status );
+    cout << status << endl;
     } while (status != sockStat::QUIT);
     
     cout << process << " is finished!" << endl;

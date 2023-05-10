@@ -28,7 +28,7 @@ lazyJob(){
 
 	for (int i = 0; i < 10; i++){
 		compare = jobs->jobs[i].getDifficulty();
-		if (jobs->jobs[i].getStatus() == notStarted && compare < difficulty){
+		if (jobs->jobs[i].getStatus() == jobStat::notStarted && compare < difficulty){
 			jobIndex = i;
 			difficulty = compare;
 		}
