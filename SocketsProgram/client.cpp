@@ -26,9 +26,11 @@ int main(int argc, char* argv[]){
 
     int buf[BUFSIZ+1];
     int responseBuffer[BUFSIZ+1];
+
     // wait for server to acknowledge the connection. 
     int nBytes = read( client.sockfd(), buf, sizeof buf );
     if( nBytes < 8 ) fatal("%s: Did not pass ACK.", process );
+
     Kid kid(buf[1]);
     cout << process << " ID in server is " << kid.getID() << endl;
     cout << process << ": My mood is " << kid.getMood() << endl;
@@ -42,14 +44,16 @@ int main(int argc, char* argv[]){
     JobTable table;
     Job* picked;
 
+    // doing chores loop
     do {
+        // loop to choose a job
         do{
             // reads in the firstACK
             cout << "Getting First ACK" << endl;
             nBytes = read( client.sockfd(), &status, sizeof status ); 
-            if (nBytes < 0) { cout << "Could not read welcome socket" << endl;}
-            if (status == sockStat::ACK) { cout << "GOT ACK" << endl;}
-            if (status == sockStat::QUIT) { cout << "GOT QUIT" << endl; break;}
+            if (nBytes < 0) { cout << "Could not read welcome socket" << endl; }
+            if (status == sockStat::ACK) { cout << "GOT ACK" << endl; }
+            else if (status == sockStat::QUIT) { cout << "GOT QUIT" << endl; break; }
 
 
             // reads in the job table from socket
@@ -90,19 +94,27 @@ int main(int argc, char* argv[]){
             if (status == sockStat::NACK) { cout << "Server has denied request" << endl; }
         } while(status == sockStat::NACK);
 
+        // if the server confirms the job is valid, do it
         if (status == sockStat::ACK){
             cout << process << " is doing their chore!" << endl;
             cout << "Chore takes " << picked->getTime() << " seconds!"  << endl;
-            sleep(picked->getTime());
+            if (picked->getTime() < 1) { 
+                cout << "Random time error! Defaulting to sleep(5)" << endl;
+                sleep(5);
+            }
+            else
+                sleep(picked->getTime());
             cout << process << " finished its chore.\n" << endl;
             completedJobs.push_back(*picked);
         }
 
+        // get one more confirmation
         nBytes = read( client.sockfd(), &status, sizeof status );
         cout << "Socket Status: " << status << endl;
         
         if (status == sockStat::QUIT) { cout << "Mom told me to QUIT!" << endl; }
     } while (status != sockStat::QUIT);
+    
     
     cout << "\nCompleted jobs: " << endl;
     for (Job job : completedJobs){
