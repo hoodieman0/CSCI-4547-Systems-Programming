@@ -8,5 +8,6 @@ int main(int argc, char* argv[]){
 	srand(time(NULL));
 	Mom m(argv[0], PORT);
     m.startServer();
+	bye();
 }
 
