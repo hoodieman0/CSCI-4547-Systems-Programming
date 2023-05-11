@@ -70,7 +70,7 @@ startPolling(){
 					if ( status == -1 ){		// remove socket from the list
 
 						// tell client to stop
-						cout << "Stopping Socket" << endl;
+						cout << "Stopping Socket!\n" << endl;
 						status = sockStat::QUIT;
 						bytes = write(worker[k].fd, &status, sizeof(status) );
 						if (bytes < 1) { fatalp("Failed to write to socket"); }
@@ -87,12 +87,12 @@ startPolling(){
 			}
 		}
 		else {
-			cout << "Not enough clients" << endl;
+			cout << "Less than " << MAXCLIENTS << " clients!" << endl;
 		}
 
 		// if the timer is done and all connections are terminated, leave the polling loop
 		if (isTimerFinished() && currentClients == 0) {
-			cout << "My timer is done!" << endl;
+			cout << "\nMy timer is done!" << endl;
 			break;
 		}
 
@@ -101,7 +101,7 @@ startPolling(){
 		welcome->events = (currentClients < MAXCLIENTS) ? POLLIN : 0;
 	}	// ENDLOOP
 
-	cout << "~End of Polling Loop~" << endl;
+	cout << "\n~End of Polling Loop~\n" << endl;
 
 	countAllowance();
 }
@@ -177,7 +177,7 @@ doService(toPoll* p, short id){
 		// send the first ACK
 		// if the timer is done, send QUIT instead
 		if (isTimerFinished()) {
-			cout << "Time's Up!" << endl;
+			cout << "Time's Up! ";
 			ACK = sockStat::QUIT;
 			bytes = write(p->fd, &ACK, sizeof(ACK) );
 			if (bytes < 1) { fatalp("Failed to write to socket"); }
@@ -189,7 +189,6 @@ doService(toPoll* p, short id){
 			return -1;
 		}
 		else {
-			cout << "Telling sock to keep going" << endl;
 			ACK = sockStat::ACK;
 			bytes = write(p->fd, &ACK, sizeof(ACK) );
 			if (bytes < 1) { fatalp("Failed to write to socket"); }
@@ -219,12 +218,9 @@ doService(toPoll* p, short id){
 			if (chosenJob.getID() == table.jobs[i].getID()){
 				if (table.jobs[i].getKid() == -1 && table.jobs[i].getStatus() == jobStat::notStarted){
 					cout << "\n" << id << " Choosing Job " << table.jobs[i].getID() << "\n" << endl;
-					cout << table.jobs[i] << endl;
-					cout << "------------------------" << endl;
 
 					table.jobs[i].chooseJob(id); 
 					completedJobs.push_back(table.jobs[i]);
-					cout << table.jobs[i] << endl;
 
 					ACK = sockStat::ACK;
 					bytes = write(p->fd, &ACK, sizeof(ACK) );
@@ -233,7 +229,7 @@ doService(toPoll* p, short id){
 					break;
 				}
 				else {
-					cout << "Job cannot be picked, sending back" << endl;
+					cout << "Job cannot be picked! Sending back...\n" << endl;
 					ACK = sockStat::NACK;
 					bytes = write(p->fd, &ACK, sizeof(ACK) );
 					if (bytes < 1) { cout << "Failed to write to socket" << endl; }
@@ -242,7 +238,7 @@ doService(toPoll* p, short id){
 			}
 			// edge case where job is not in table
 			if (i >= 9){
-				cout << "Job cannot be FOUND, sending back" << endl;
+				cout << "Job cannot be FOUND! sending back...\n" << endl;
 				ACK = sockStat::NACK;
 				bytes = write(p->fd, &ACK, sizeof(ACK) );
 				if (bytes < 1) { cout << "Failed to write to socket" << endl; }
@@ -252,8 +248,9 @@ doService(toPoll* p, short id){
 		
 		// display the jobs
 		cout << "Job Table: " << endl;
+		cout << "| ";
 		for (int i =0; i < 10; i++) {
-			cout << table.jobs[i].getID() << " : " << table.jobs[i].getKid() << " | ";
+			cout << "ID-" << table.jobs[i].getID() << " : Kid-" << table.jobs[i].getKid() << " | ";
 		}
 		cout << "\n" << endl;
 	}
@@ -315,7 +312,7 @@ countAllowance(){
 
 	// reward the highest earner
 	kidMoney[highest] += 5;
-	cout << highest+1 << " has earned the most and gets $5 extra!" << endl;
+	cout << "Kid " << highest+1 << " has earned the most and gets $5 extra!\n" << endl;
 
 	// print out each reward
 	for (int i = 0; i < totalClients; i++){
