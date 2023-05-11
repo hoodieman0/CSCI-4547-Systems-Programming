@@ -114,7 +114,7 @@ int main(int argc, char* argv[]){
         nBytes = read( client.sockfd(), &status, sizeof status );
         cout << "Socket Status: " << status << endl;
         
-        if (status == sockStat::QUIT) { cout << "Mom told me to QUIT!" << endl; }
+        if (status == sockStat::QUIT) { cout << "Mom told me to QUIT!" << endl; break; }
     } while (status != sockStat::QUIT);
     
     // show all jobs the kid has done
