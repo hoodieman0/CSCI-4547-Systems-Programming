@@ -12,15 +12,6 @@ class JobTable {
 		    jobs[i] = Job();
 	    }
     }
-
-    bool checkDone(){
-        for(int i = 0; i < 10; i ++){
-		    if (jobs[i].getStatus() != jobStat::complete){
-                return false;
-            }
-	    }
-        return true;
-    }
 };
 
 #endif
