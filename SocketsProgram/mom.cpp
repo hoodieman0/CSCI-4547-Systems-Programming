@@ -250,7 +250,7 @@ doService(toPoll* p, short id){
 		cout << "Job Table: " << endl;
 		cout << "| ";
 		for (int i =0; i < 10; i++) {
-			cout << "ID-" << table.jobs[i].getID() << " : Kid-" << table.jobs[i].getKid() << " | ";
+			cout << "ID <" << table.jobs[i].getID() << "> : Kid <" << table.jobs[i].getKid() << "> | ";
 		}
 		cout << "\n" << endl;
 	}

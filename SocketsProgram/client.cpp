@@ -48,15 +48,15 @@ int main(int argc, char* argv[]){
         // loop to choose a job
         do{
             // reads in the firstACK
-            cout << "Getting First ACK" << endl;
             nBytes = read( client.sockfd(), &status, sizeof status ); 
             if (nBytes < 0) { cout << "Could not read welcome socket" << endl; }
-            if (status == sockStat::ACK) { cout << "GOT ACK" << endl; }
-            else if (status == sockStat::QUIT) { cout << "GOT QUIT" << endl; break; }
+            if (status == sockStat::ACK) { cout << "\nGOT ACK" << endl; }
+            else if (status == sockStat::QUIT) { cout << "\nGOT QUIT" << endl; break; }
+            else if (status == sockStat::NACK) { cout << "\nGOT NACK" << endl; } // should not happen
+            else cout << "\nUnknown status!" << endl;
 
 
             // reads in the job table from socket
-            cout << "\nFetching jobs" << endl;
             nBytes = read( client.sockfd(), &table, sizeof (table) ); 
             if (nBytes < 0) { cout << "Could not read welcome socket" << endl;}
             cout << process << " Acknowledgement: Has received Job Table" << endl;
@@ -67,7 +67,7 @@ int main(int argc, char* argv[]){
 
             // if there is no job, send a NACK
             if (picked == nullptr) { 
-                cout << "No jobs left to do!" << endl; 
+                cout << "No jobs left to do!\n" << endl; 
                 status = sockStat::NACK;
                 nBytes = write( client.sockfd(), &status, sizeof(status) ); 
                 break;
@@ -86,8 +86,9 @@ int main(int argc, char* argv[]){
 
             // print out the state of the job list
             cout << "Job List: " << endl;
-            for (int i =0; i < 10; i++) {
-                cout << table.jobs[i].getID() << " : " << table.jobs[i].getKid() << " | ";
+            cout << "| ";
+            for (int i = 0; i < 10; i++) {
+                cout << "ID <" << table.jobs[i].getID() << "> : Kid <" << table.jobs[i].getKid() << "> | ";
             }
             cout << "\n" << endl;
 
@@ -99,7 +100,7 @@ int main(int argc, char* argv[]){
             cout << process << " is doing their chore!" << endl;
             cout << "Chore takes " << picked->getTime() << " seconds!"  << endl;
             if (picked->getTime() < 1) { 
-                cout << "Random time error! Defaulting to sleep(5)" << endl;
+                cout << "rand() time error! Defaulting to sleep(5)" << endl;
                 sleep(5);
             }
             else
@@ -112,9 +113,9 @@ int main(int argc, char* argv[]){
 
         // get one more confirmation
         nBytes = read( client.sockfd(), &status, sizeof status );
-        cout << "Socket Status: " << status << endl;
         
         if (status == sockStat::QUIT) { cout << "Mom told me to QUIT!" << endl; }
+        cout << "Socket Status: " << status << endl;
     } while (status != sockStat::QUIT);
     
     // show all jobs the kid has done
