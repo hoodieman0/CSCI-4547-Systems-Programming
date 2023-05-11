@@ -23,6 +23,7 @@ class Job {
 
     // Setters
     void chooseJob(short kidID) { kid = kidID; status = working; }
+    void announceDone() { status = jobStat::complete; }
 
     // Getters
     jobStat getStatus() const { return status; };

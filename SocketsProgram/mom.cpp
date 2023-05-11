@@ -29,6 +29,9 @@ startPolling(){
 
 	char greeting[284];
 	sprintf(greeting, "Connected to (%s.%d)\n", hostname, port);
+	sockStat ACK = sockStat::ACK;
+
+	int bytes;
 
     for (;;) {
 		status = poll(userFDs, 1 + currentClients, -1);
@@ -46,29 +49,43 @@ startPolling(){
 		}
 		// =====================================================================
 		// Scan the working sockets and process whatever tasks you find
-		if (currentClients >= 1){
-		short k;
-		for (k = 0; k < currentClients; k++) {
-			
-			if (worker[k].revents != 0) {
-				status = doService( &worker[k], k+1 );
-				if ( status == -1){		// Remove dead socket from polling table
-					status = sockStat::QUIT;
-					int bytes = write(worker[k].fd, &status, sizeof(status) );
-					if (bytes < 1) { fatalp("Failed to write to socket"); }
-					worker[k] = worker[--currentClients];		// decrement # of workers
+		if (currentClients >= MAXCLIENTS){
+			if (startTime == 0) { startTimer(); cout << "Start Time: " << startTime << endl; }
+			short k;
+			for (k = 0; k < currentClients; k++) {
+				
+				if (worker[k].revents != 0) {
+					status = doService( &worker[k], k+1 );
+					curTime = time(NULL);
+					if ( status == -1 ){		// Remove dead socket from polling table
+						// tell client to stop
+						cout << "Stopping Socket" << endl;
+						status = sockStat::QUIT;
+						bytes = write(worker[k].fd, &status, sizeof(status) );
+						if (bytes < 1) { fatalp("Failed to write to socket"); }
+						worker[k] = worker[--currentClients];		// decrement # of workers
+					}
+					else {	// let client know to keep going
+						ACK = sockStat::ACK;
+						bytes = write(worker[k].fd, &ACK, sizeof(ACK) );
+						if (bytes < 1) { fatalp("Failed to write to socket"); }
+					}
 				}
-				else {
-					status = sockStat::ACK;
-					int bytes = write(worker[k].fd, &status, sizeof(status) );
-					if (bytes < 1) { fatalp("Failed to write to socket"); }
-				}
+				
+			}
+			if (isTimerFinished()) {
+				cout << "My timer is done!" << endl;
+				break;
 			}
 		}
-	}
+		else {
+			cout << "Not enough clients" << endl;
+		}
 		// stop looking for new clients if max has been reached ----------------
 		welcome->events = (currentClients < MAXCLIENTS) ? POLLIN : 0;
 	}	// end polling loop
+
+	cout << "End of Polling Loop" << endl;
 }
 
 
@@ -139,6 +156,7 @@ doService(toPoll* p, short id){
 			}
 		}
 		else if (p->revents & POLLOUT){
+
 			// probably need a quitFlag
 				/*
 					Currently:
@@ -150,44 +168,88 @@ doService(toPoll* p, short id){
 				*/
 
 			int ACK = sockStat::ACK;
+
+			// send the first Acknowledgement
 			int bytes = write(p->fd, &ACK, sizeof(ACK) );
 			//if (bytes < 1) { cout << "Failed to write to socket" << endl; }
 
-				bytes = write(p->fd, &table, sizeof(table) );
-				if (bytes < 1) { cout << "Failed to write to socket" << endl; }
+			// send the table 
+			bytes = write(p->fd, &table, sizeof(table) );
+			if (bytes < 1) { cout << "Failed to write to socket" << endl; }
 				
-				Job chosenJob;
-				bytes = read(p->fd, &chosenJob, sizeof (chosenJob));
-				if (bytes < 0) { cout << "Could not read socket on " << p->fd << endl; return -1; }
-				cout << p->fd << " picked " << chosenJob.getID() <<" with Value : " << chosenJob.getValue() << endl;
-				for(int i = 0; i<10;i++) {//job : table.jobs){
-					if (chosenJob.getID() == table.jobs[i].getID()){
-						if (table.jobs[i].getKid() == -1 && table.jobs[i].getStatus() == jobStat::notStarted){
-							cout << "Choosing Job " << table.jobs[i].getID() << "\n" << endl;
-							cout << table.jobs[i] << endl;
-							cout << "------------------------" << endl;
-							table.jobs[i].chooseJob(id); 
-							cout << table.jobs[i] << endl;
-							ACK = sockStat::ACK;
-							int bytes = write(p->fd, &ACK, sizeof(ACK) );
-							if (bytes < 1) { cout << "Failed to write to socket" << endl; }
-							break;
-							}
-						else {
-							cout << "Job cannot be picked, sending back" << endl;
-							ACK = sockStat::NACK;
-							bytes = write(p->fd, &ACK, sizeof(ACK) );
-							if (bytes < 1) { cout << "Failed to write to socket" << endl; }
-							break;
-						}
+			
+
+			// read the incoming ACK
+			bytes = read(p->fd, &ACK, sizeof ACK );
+
+			// if the client did not pick a job, stop doing the service
+			// else read the job
+			if (ACK == sockStat::NACK) return retval;
+
+			Job chosenJob;
+			bytes = read(p->fd, &chosenJob, sizeof (chosenJob));
+			if (bytes < 0) { cout << "Could not read socket on " << p->fd << endl; return -1; }
+			
+			cout << p->fd << " picked " << chosenJob.getID() <<" with Value : " << chosenJob.getValue() << endl;
+			
+			// check the jobs array if the chosen job is matched, and reserve that job and send an ACk
+			// if that job is already reserved, send an NACK
+			for(int i = 0; i < 10; i++) {
+				if (chosenJob.getID() == table.jobs[i].getID()){
+					if (table.jobs[i].getKid() == -1 && table.jobs[i].getStatus() == jobStat::notStarted){
+						cout << "\n" << id << " Choosing Job " << table.jobs[i].getID() << "\n" << endl;
+						cout << table.jobs[i] << endl;
+						cout << "------------------------" << endl;
+
+						table.jobs[i].chooseJob(id); 
+						cout << table.jobs[i] << endl;
+
+						ACK = sockStat::ACK;
+						bytes = write(p->fd, &ACK, sizeof(ACK) );
+						if (bytes < 1) { cout << "Failed to write to socket" << endl; }
+
+						break;
+					}
+					else {
+						cout << "Job cannot be picked, sending back" << endl;
+						ACK = sockStat::NACK;
+						bytes = write(p->fd, &ACK, sizeof(ACK) );
+						if (bytes < 1) { cout << "Failed to write to socket" << endl; }
+						break;
 					}
 				}
-				for (int i =0; i < 10; i++) {
-					cout << table.jobs[i].getID() << " _ " << table.jobs[i].getKid() << " | ";
+				// edge case where job is not in table
+				if (i >= 9){
+					cout << "Job cannot be FOUND, sending back" << endl;
+					ACK = sockStat::NACK;
+					bytes = write(p->fd, &ACK, sizeof(ACK) );
+					if (bytes < 1) { cout << "Failed to write to socket" << endl; }
+					break;
 				}
-				cout << endl;
+			}
+			
+			// display the jobs
+			cout << "Job Table: " << endl;
+			for (int i =0; i < 10; i++) {
+				cout << table.jobs[i].getID() << " : " << table.jobs[i].getKid() << " | ";
+			}
+			cout << "\n" << endl;
+
+			if (isTimerFinished()) {
+				cout << "Time's Up!" << endl;
+				// ACK = sockStat::QUIT;
+				// bytes = write(p->fd, &ACK, sizeof(ACK) );
+				// if (bytes < 1) { fatalp("Failed to write to socket"); }
+				retval = -1;
+			}
+			else {
+				ACK = sockStat::ACK;
+				bytes = write(p->fd, &ACK, sizeof(ACK) );
+				if (bytes < 1) { fatalp("Failed to write to socket"); }
+				retval = 0;
+			}
 				
-			retval = 0;
+			
 			
 		}
 		// ---------------------------- It wasn't a message, so test for hangup.

@@ -33,50 +33,65 @@ int main(int argc, char* argv[]){
     nBytes = write( client.sockfd(), &responseBuffer, sizeof(responseBuffer) );
     if( nBytes < 0 ) fatal("%s: Error while writing to socket.", process);
 
-    sockStat status;
+    sockStat status = sockStat::ACK;
 
     JobTable table;
     Job* picked;
 
     do {
-    do{
-        nBytes = read( client.sockfd(), &status, sizeof status ); // reads in the firstACK
+        do{
+            // reads in the firstACK
+            nBytes = read( client.sockfd(), &status, sizeof status ); 
+            if (nBytes < 0) { cout << "Could not read welcome socket" << endl;}
 
-        // reads in the job table from socket
-        cout << "\nFetching jobs" << endl;
-        nBytes = read( client.sockfd(), &table, sizeof (table) ); 
-        if (nBytes < 0) { cout << "Could not read welcome socket" << endl;}
-        cout << process << " Acknowledgement: Has received Job Table" << endl;
+            // reads in the job table from socket
+            cout << "\nFetching jobs" << endl;
+            nBytes = read( client.sockfd(), &table, sizeof (table) ); 
+            if (nBytes < 0) { cout << "Could not read welcome socket" << endl;}
+            cout << process << " Acknowledgement: Has received Job Table" << endl;
 
-        // chooses a job from the table
-        kid.setTable(&table);
-        cout << "Here1" << endl;
-        picked = kid.pickJob();
-        cout << "Here2" << endl;
-        if (picked == nullptr) { cout << "No jobs left to do!" << endl; break;} 
-        cout << "Here0" << endl;
+            // chooses a job from the table
+            kid.setTable(&table);
+            picked = kid.pickJob();
 
-        // send picked job over the socket
-        cout << process << " picked " << picked->getID() <<" with Value : " << picked->getValue() << endl;
-        nBytes = write( client.sockfd(), picked, sizeof(*picked) ); 
+            // if there is no job, send a NACK
+            if (picked == nullptr) { 
+                cout << "No jobs left to do!" << endl; 
+                status = sockStat::NACK;
+                nBytes = write( client.sockfd(), &status, sizeof(status) ); 
+                break;
+            } 
 
-        // read in the ACK, if ACK break, if NACK repeat
-        nBytes = read( client.sockfd(), &status, sizeof status );
-        for (int i =0; i < 10; i++) {
-					cout << table.jobs[i].getID() << " _ " << table.jobs[i].getKid() << " | ";
-				}
-				cout << endl;
-        if (status == sockStat::NACK) { cout << "Server has denied request" << endl; }
-    } while(status == sockStat::NACK);
+            // else send an ACK
+            status = sockStat::ACK;
+            nBytes = write( client.sockfd(), &status, sizeof(status) ); 
 
-    if (status == sockStat::ACK){
+            // send picked job over the socket
+            cout << process << " picked " << picked->getID() <<" with Value : " << picked->getValue() << "\n" << endl;
+            nBytes = write( client.sockfd(), picked, sizeof(*picked) ); 
+
+            // read in the ACK, if ACK break, if NACK repeat
+            nBytes = read( client.sockfd(), &status, sizeof status );
+
+            cout << "Job List: " << endl;
+            for (int i =0; i < 10; i++) {
+                cout << table.jobs[i].getID() << " _ " << table.jobs[i].getKid() << " | ";
+            }
+            cout << "\n" << endl;
+
+            if (status == sockStat::NACK) { cout << "Server has denied request" << endl; }
+        } while(status == sockStat::NACK);
+
+        if (status == sockStat::ACK){
             cout << process << " is doing their chore!" << endl;
             sleep(picked->getTime());
             cout << process << " finished its chore.\n" << endl;
         }
 
-    nBytes = read( client.sockfd(), &status, sizeof status );
-    cout << status << endl;
+        nBytes = read( client.sockfd(), &status, sizeof status );
+        cout << "Socket Status: " << status << endl;
+        
+        if (status == sockStat::QUIT) { cout << "Mom told me to QUIT!" << endl; }
     } while (status != sockStat::QUIT);
     
     cout << process << " is finished!" << endl;

@@ -23,7 +23,7 @@ pickJob(){
 
 Job* Kid::
 lazyJob(){
-	int jobIndex;
+	int jobIndex = -1;
 	short compare, difficulty = 6;
 
 	for (int i = 0; i < 10; i++){
@@ -34,6 +34,8 @@ lazyJob(){
 		}
 	}
 
+	if (jobIndex == -1) return nullptr;
+
 	jobs->jobs[jobIndex].chooseJob(name);
 
 	return &jobs->jobs[jobIndex];
@@ -41,7 +43,7 @@ lazyJob(){
 
 Job* Kid::
 shortJob(){
-	int jobIndex;
+	int jobIndex = -1;
 	short compare, time = 6;
 
 	for (int i = 0; i < 10; i++){
@@ -52,6 +54,8 @@ shortJob(){
 		}
 	}
 
+	if (jobIndex == -1) return nullptr;
+
 	jobs->jobs[jobIndex].chooseJob(name);
 
 	return &jobs->jobs[jobIndex];
@@ -59,7 +63,7 @@ shortJob(){
 
 Job* Kid::
 cleanJob(){
-	int jobIndex;
+	int jobIndex = -1;
 	short compare, dirtiness = 6;
 
 	for (int i = 0; i < 10; i++){
@@ -69,7 +73,7 @@ cleanJob(){
 			dirtiness = compare;
 		}
 	}
-
+	if (jobIndex == -1) return nullptr;
 	jobs->jobs[jobIndex].chooseJob(name);
 
 	return &jobs->jobs[jobIndex];
@@ -77,7 +81,7 @@ cleanJob(){
 
 Job* Kid::
 greedyJob(){
-	int jobIndex;
+	int jobIndex = -1;
 	short compare, value = 0;
 
 	for (int i = 0; i < 10; i++){
@@ -87,6 +91,7 @@ greedyJob(){
 			value = compare;
 		}
 	}
+	if (jobIndex == -1) return nullptr;
 
 	jobs->jobs[jobIndex].chooseJob(name);
 
@@ -95,7 +100,7 @@ greedyJob(){
 
 Job* Kid::
 anyJob(){
-	int jobIndex;
+	int jobIndex = -1;
 
 	for (int i = 0; i < 10; i++){
 		if (jobs->jobs[i].getStatus() == notStarted){
@@ -103,7 +108,7 @@ anyJob(){
 			break;
 		}
 	}
-
+	if (jobIndex == -1) return nullptr;
 	jobs->jobs[jobIndex].chooseJob(name);
 
 	return &jobs->jobs[jobIndex];

@@ -1,7 +1,8 @@
 #ifndef MOM_HPP
 #define MOM_HPP
 
-#define MAXCLIENTS 10
+#define MAXCLIENTS 3
+#define TIMERMAX 21
 
 #include "tools.hpp"
 #include "enums.hpp"
@@ -19,6 +20,10 @@ private:
     char hostname[242]; // to store name of local host.
     string process;
 
+    //timer stuff
+    time_t startTime = 0;
+    time_t curTime = 0;
+
     //Socket things
     int port;
     Socket server;
@@ -33,6 +38,9 @@ public:
     void startPolling();
     int doWelcome(int welcomeSock, int* nClip, toPoll* worker, const char* greeting);
     int doService(toPoll* p, short id);
+
+    void startTimer() { startTime = time(NULL); }
+    bool isTimerFinished() { curTime = time(NULL); return (curTime - startTime >= TIMERMAX) ? true : false; }
 
     int getPort(int fd);
     void printsockaddr_in(const char* who, sockaddr_in sock);

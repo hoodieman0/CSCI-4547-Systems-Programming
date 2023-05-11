@@ -10,3 +10,5 @@ sleep 3
 
 # Open another terminal window and run ./clientPat
 xterm -e "./clientPat localhost" &
+xterm -e "./clientJohn localhost" &
+xterm -e "./clientMary localhost" &

@@ -12,8 +12,14 @@ class JobTable {
 		    jobs[i] = Job();
 	    }
     }
-    void chooseJob(short jobID, short kidID){
 
+    bool checkDone(){
+        for(int i = 0; i < 10; i ++){
+		    if (jobs[i].getStatus() != jobStat::complete){
+                return false;
+            }
+	    }
+        return true;
     }
 };
 
