@@ -105,6 +105,7 @@ int main(int argc, char* argv[]){
             else
                 sleep(picked->getTime());
             cout << process << " finished its chore.\n" << endl;
+            picked->announceDone();
             completedJobs.push_back(*picked);
         }
 
