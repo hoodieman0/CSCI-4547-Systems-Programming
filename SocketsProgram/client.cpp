@@ -109,12 +109,12 @@ int main(int argc, char* argv[]){
             completedJobs.push_back(*picked);
         }
 
-        if (status == sockStat::QUIT) { cout << "Mom told me to QUIT!" << endl; }
+
         // get one more confirmation
         nBytes = read( client.sockfd(), &status, sizeof status );
         cout << "Socket Status: " << status << endl;
         
-        if (status == sockStat::QUIT) { cout << "Mom told me to QUIT!" << endl; break; }
+        if (status == sockStat::QUIT) { cout << "Mom told me to QUIT!" << endl; }
     } while (status != sockStat::QUIT);
     
     // show all jobs the kid has done
