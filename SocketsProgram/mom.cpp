@@ -141,7 +141,7 @@ doWelcome(int welcomeSock, int* nClip, toPoll* worker, const char* greeting){
 	
 	// Put new socket into our polling list.
 	worker[nCli].fd = newfd;
-	worker[nCli].events = POLLIN | POLLOUT;
+	worker[nCli].events = POLLOUT;
 	worker[nCli].revents = 0;
 	
 	*nClip = nCli;		// Return the possibly-modified index of last client.
@@ -155,34 +155,12 @@ doWelcome(int welcomeSock, int* nClip, toPoll* worker, const char* greeting){
 // confirm if that job is valid, if it is mark it off as complete 
 int Mom::
 doService(toPoll* p, short id){
-	char buf[BUFSIZ + 1];
 	int retval = 0;		// Change in number of workers.
 	
 	if (p->revents == 0)  return -1;
 
-	//  Test for a message event.
-	if (p->revents & POLLIN) {// This is a read event--read it
-		int bytes = read(p->fd, buf, (sizeof buf) - 1);
-		//  We got a message, so handle it.
-		if (bytes > 0) {		
-			buf[bytes] = '\0';	// read does not null terminate.
-			printf("\nFrom port %d:\t\t( %s ", getPort(p->fd), buf);
-		} 
-		// -----------------------No message, so handle the possible errors.
-		else if (bytes == 0) {	// Indicates end of file.
-			printf("closing socket on port %d\n", getPort(p->fd));
-			close(p->fd);
-			retval = -1;
-		} else if (errno == ECONNRESET) {
-			sayp("socket %d disappeared", getPort(p->fd));
-			close(p->fd);
-			retval = -1;
-		} else {
-			fatalp("Error %d from read, port %d", bytes, getPort(p->fd));
-		}
-	}
 	// Write event
-	else if (p->revents & POLLOUT){
+	 if (p->revents & POLLOUT){
 		/*
 			Currently:
 			if timer is done: send QUIT
@@ -194,7 +172,7 @@ doService(toPoll* p, short id){
 		*/
 
 		int ACK = sockStat::ACK;
-		int bytes;
+		int bytes = 0;
 
 		// send the first ACK
 		// if the timer is done, send QUIT instead
@@ -203,6 +181,11 @@ doService(toPoll* p, short id){
 			ACK = sockStat::QUIT;
 			bytes = write(p->fd, &ACK, sizeof(ACK) );
 			if (bytes < 1) { fatalp("Failed to write to socket"); }
+			
+			do {
+				bytes = read(p->fd, &ACK, sizeof ACK );
+			} while (ACK != sockStat::ACK);
+
 			return -1;
 		}
 		else {
