@@ -21,12 +21,10 @@ int main(int argc, char* argv[]){
     Socket client(process);
     client.connect(serverName, PORT);
 
-    
-
-
     int buf[BUFSIZ+1];
     int responseBuffer[BUFSIZ+1];
 
+    // corresponds to doWelcome() in server
     // wait for server to acknowledge the connection. 
     int nBytes = read( client.sockfd(), buf, sizeof buf );
     if( nBytes < 8 ) fatal("%s: Did not pass ACK.", process );
@@ -45,6 +43,7 @@ int main(int argc, char* argv[]){
     Job* picked;
 
     // doing chores loop
+    // corresponds to doService() in server
     do {
         // loop to choose a job
         do{
@@ -85,6 +84,7 @@ int main(int argc, char* argv[]){
             // read in the ACK, if ACK break, if NACK repeat
             nBytes = read( client.sockfd(), &status, sizeof status );
 
+            // print out the state of the job list
             cout << "Job List: " << endl;
             for (int i =0; i < 10; i++) {
                 cout << table.jobs[i].getID() << " : " << table.jobs[i].getKid() << " | ";
@@ -108,6 +108,7 @@ int main(int argc, char* argv[]){
             completedJobs.push_back(*picked);
         }
 
+        if (status == sockStat::QUIT) { cout << "Mom told me to QUIT!" << endl; }
         // get one more confirmation
         nBytes = read( client.sockfd(), &status, sizeof status );
         cout << "Socket Status: " << status << endl;
@@ -115,7 +116,7 @@ int main(int argc, char* argv[]){
         if (status == sockStat::QUIT) { cout << "Mom told me to QUIT!" << endl; }
     } while (status != sockStat::QUIT);
     
-    
+    // show all jobs the kid has done
     cout << "\nCompleted jobs: " << endl;
     for (Job job : completedJobs){
         cout << job << endl;
