@@ -1,3 +1,5 @@
+#include <vector>
+
 #include "tools.hpp"
 #include "Socket.hpp"
 #include "kid.hpp"
@@ -13,6 +15,8 @@ int main(int argc, char* argv[]){
     if ( argc != 2 ) fatal( "usage: %s hostname\n", process );
 
     char* serverName = argv[1];
+
+    vector<Job> completedJobs;
 
     Socket client(process);
     client.connect(serverName, PORT);
@@ -79,7 +83,7 @@ int main(int argc, char* argv[]){
 
             cout << "Job List: " << endl;
             for (int i =0; i < 10; i++) {
-                cout << table.jobs[i].getID() << " _ " << table.jobs[i].getKid() << " | ";
+                cout << table.jobs[i].getID() << " : " << table.jobs[i].getKid() << " | ";
             }
             cout << "\n" << endl;
 
@@ -91,6 +95,7 @@ int main(int argc, char* argv[]){
             cout << "Chore takes " << picked->getTime() << " seconds!"  << endl;
             sleep(picked->getTime());
             cout << process << " finished its chore.\n" << endl;
+            completedJobs.push_back(*picked);
         }
 
         nBytes = read( client.sockfd(), &status, sizeof status );
@@ -99,10 +104,12 @@ int main(int argc, char* argv[]){
         if (status == sockStat::QUIT) { cout << "Mom told me to QUIT!" << endl; }
     } while (status != sockStat::QUIT);
     
-    cout << process << " is finished!" << endl;
-    // Write lines until message is complete.
-    // Number of lines to write from defined poem
+    cout << "\nCompleted jobs: " << endl;
+    for (Job job : completedJobs){
+        cout << job << endl;
+    }
 
+    cout << process << " is finished!" << endl;
 
     return 0;
 }
