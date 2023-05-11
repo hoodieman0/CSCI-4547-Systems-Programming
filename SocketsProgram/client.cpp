@@ -41,8 +41,12 @@ int main(int argc, char* argv[]){
     do {
         do{
             // reads in the firstACK
+            cout << "Getting First ACK" << endl;
             nBytes = read( client.sockfd(), &status, sizeof status ); 
             if (nBytes < 0) { cout << "Could not read welcome socket" << endl;}
+            if (status == sockStat::ACK) { cout << "GOT ACK" << endl;}
+            if (status == sockStat::QUIT) { cout << "GOT QUIT" << endl; break;}
+
 
             // reads in the job table from socket
             cout << "\nFetching jobs" << endl;
@@ -60,7 +64,7 @@ int main(int argc, char* argv[]){
                 status = sockStat::NACK;
                 nBytes = write( client.sockfd(), &status, sizeof(status) ); 
                 break;
-            } 
+            }
 
             // else send an ACK
             status = sockStat::ACK;
@@ -84,6 +88,7 @@ int main(int argc, char* argv[]){
 
         if (status == sockStat::ACK){
             cout << process << " is doing their chore!" << endl;
+            cout << "Chore takes " << picked->getTime() << " seconds!"  << endl;
             sleep(picked->getTime());
             cout << process << " finished its chore.\n" << endl;
         }

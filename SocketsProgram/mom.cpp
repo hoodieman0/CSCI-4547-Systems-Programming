@@ -49,14 +49,13 @@ startPolling(){
 		}
 		// =====================================================================
 		// Scan the working sockets and process whatever tasks you find
-		if (currentClients >= MAXCLIENTS){
+		if (currentClients >= MAXCLIENTS || isTimerFinished()){
 			if (startTime == 0) { startTimer(); cout << "Start Time: " << startTime << endl; }
 			short k;
 			for (k = 0; k < currentClients; k++) {
 				
 				if (worker[k].revents != 0) {
 					status = doService( &worker[k], k+1 );
-					curTime = time(NULL);
 					if ( status == -1 ){		// Remove dead socket from polling table
 						// tell client to stop
 						cout << "Stopping Socket" << endl;
@@ -73,19 +72,25 @@ startPolling(){
 				}
 				
 			}
-			if (isTimerFinished()) {
-				cout << "My timer is done!" << endl;
-				break;
-			}
+			
 		}
 		else {
 			cout << "Not enough clients" << endl;
 		}
+
+		if (isTimerFinished() && currentClients == 0) {
+				cout << "My timer is done!" << endl;
+				break;
+		}
+
 		// stop looking for new clients if max has been reached ----------------
 		welcome->events = (currentClients < MAXCLIENTS) ? POLLIN : 0;
 	}	// end polling loop
 
-	cout << "End of Polling Loop" << endl;
+	cout << "~End of Polling Loop~" << endl;
+
+	countAllowance();
+
 }
 
 
@@ -124,6 +129,7 @@ doWelcome(int welcomeSock, int* nClip, toPoll* worker, const char* greeting){
 	worker[nCli].revents = 0;
 	
 	*nClip = nCli;		// Return the possibly-modified index of last client.
+	totalClients++;
 	return 1;
 }
 
@@ -168,9 +174,26 @@ doService(toPoll* p, short id){
 				*/
 
 			int ACK = sockStat::ACK;
+			int bytes;
 
 			// send the first Acknowledgement
-			int bytes = write(p->fd, &ACK, sizeof(ACK) );
+			// int bytes = write(p->fd, &ACK, sizeof(ACK) );
+			if (isTimerFinished()) {
+				cout << "Time's Up!" << endl;
+				ACK = sockStat::QUIT;
+				bytes = write(p->fd, &ACK, sizeof(ACK) );
+				if (bytes < 1) { fatalp("Failed to write to socket"); }
+				// retval = -1;
+				return -1;
+			}
+			else {
+				cout << "Telling sock to keep going" << endl;
+				ACK = sockStat::ACK;
+				bytes = write(p->fd, &ACK, sizeof(ACK) );
+				if (bytes < 1) { fatalp("Failed to write to socket"); }
+				retval = 0;
+			}
+
 			//if (bytes < 1) { cout << "Failed to write to socket" << endl; }
 
 			// send the table 
@@ -202,6 +225,7 @@ doService(toPoll* p, short id){
 						cout << "------------------------" << endl;
 
 						table.jobs[i].chooseJob(id); 
+						completedJobs.push_back(table.jobs[i]);
 						cout << table.jobs[i] << endl;
 
 						ACK = sockStat::ACK;
@@ -235,19 +259,20 @@ doService(toPoll* p, short id){
 			}
 			cout << "\n" << endl;
 
-			if (isTimerFinished()) {
-				cout << "Time's Up!" << endl;
-				// ACK = sockStat::QUIT;
-				// bytes = write(p->fd, &ACK, sizeof(ACK) );
-				// if (bytes < 1) { fatalp("Failed to write to socket"); }
-				retval = -1;
-			}
-			else {
-				ACK = sockStat::ACK;
-				bytes = write(p->fd, &ACK, sizeof(ACK) );
-				if (bytes < 1) { fatalp("Failed to write to socket"); }
-				retval = 0;
-			}
+			// if (isTimerFinished()) {
+			// 	cout << "Time's Up!" << endl;
+			// 	ACK = sockStat::QUIT;
+			// 	bytes = write(p->fd, &ACK, sizeof(ACK) );
+			// 	if (bytes < 1) { fatalp("Failed to write to socket"); }
+			// 	retval = -1;
+			// }
+			// else {
+			// 	cout << "Telling sock to keep going"
+			// 	ACK = sockStat::ACK;
+			// 	bytes = write(p->fd, &ACK, sizeof(ACK) );
+			// 	if (bytes < 1) { fatalp("Failed to write to socket"); }
+			// 	retval = 0;
+			// }
 				
 			
 			
@@ -279,4 +304,28 @@ getPort(int fd){
 	int status = getpeername(fd, (sockaddr*) &client, &sockLen);
 	if (status<0) fatalp("Can't get port# of socket (%d)", fd);
 	return ntohs(client.sin_port);
+}
+
+void Mom::
+countAllowance(){
+	cout <<"Completed Jobs: " <<completedJobs.size() <<endl;
+	int kidMoney[totalClients + 1] = {0, 0, 0, 0};
+	int highest, compare = 0;
+	
+	for (Job j : completedJobs){
+		int kidIndex = j.getKid() - 1;
+		kidMoney[kidIndex] += j.getValue();
+
+		if (compare < kidMoney[kidIndex]){
+			highest = kidIndex;
+			compare = kidMoney[kidIndex];
+		}
+	}
+
+	// reward the highest earner
+	kidMoney[highest] += 5;
+
+	for (int i = 0; i < totalClients; i++){
+		cout << "Kid: " << i+1 <<" Money: " <<kidMoney[i] <<endl;
+	}
 }

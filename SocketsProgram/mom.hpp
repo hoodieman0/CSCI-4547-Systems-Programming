@@ -3,6 +3,7 @@
 
 #define MAXCLIENTS 3
 #define TIMERMAX 21
+#include <vector>
 
 #include "tools.hpp"
 #include "enums.hpp"
@@ -16,6 +17,7 @@ typedef pollfd toPoll;
 class Mom {
 private:
     JobTable table;
+    vector<Job> completedJobs;
 
     char hostname[242]; // to store name of local host.
     string process;
@@ -28,6 +30,7 @@ private:
     int port;
     Socket server;
     int currentClients = 0;
+    int totalClients = 0;
     toPoll userFDs[MAXCLIENTS + 1];
     toPoll* const welcome = &userFDs[0];
     toPoll* const worker = &userFDs[1];
@@ -40,10 +43,12 @@ public:
     int doService(toPoll* p, short id);
 
     void startTimer() { startTime = time(NULL); }
-    bool isTimerFinished() { curTime = time(NULL); return (curTime - startTime >= TIMERMAX) ? true : false; }
+    bool isTimerFinished() {curTime = time(NULL); return (curTime - startTime >= TIMERMAX) ? true : false; }
 
     int getPort(int fd);
     void printsockaddr_in(const char* who, sockaddr_in sock);
+
+    void countAllowance();
 };
 
 #endif

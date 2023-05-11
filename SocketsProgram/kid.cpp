@@ -1,7 +1,7 @@
 #include "kid.hpp"
 
 Kid::
-Kid(int kidID) : name(kidID){ chooseMood(); }
+Kid(int kidID) : name(kidID){ srand(time(NULL)); chooseMood(); }
 
 Job* Kid::
 pickJob(){
